@@ -1,0 +1,180 @@
+:root {
+  --color-bg: #e0e2dd;
+  --color-primary: #c9a416;
+  --color-secondary: #a8a578;
+  --color-accent: #8d4820;
+  --color-text: #2e2e2e;
+  --color-white: #ffffff;
+}
+
+/* Container principal */
+.start-container {
+  background-color: var(--color-bg);
+  min-height: 100vh; 
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+}
+
+/* --- HEADER CORRIGIDO --- */
+.header-start {
+  height: 90px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  
+  /* Isso joga a logo  esquerda e botão  direita */
+  justify-content: space-between; 
+  
+  border-bottom: 1px solid var(--color-accent);
+  padding: 0 120px; 
+  background-color: transparent;
+}
+
+/* Botão do Header */
+.btn-header {
+  background-color: var(--color-primary);
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.btn-header:hover {
+  background-color: var(--color-secondary);
+  transform: translateY(-2px);
+}
+
+/* Imagens */
+.logo-img {
+  width: 200px; 
+  object-fit: contain;
+}
+
+/* HERO Section */
+.hero {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 120px;
+  gap: 40px;
+}
+
+.hero-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.hero-image:first-child {
+  justify-content: flex-start;
+}
+
+.hero-image:last-child {
+  justify-content: flex-end;
+}
+
+.hero-image img {
+  max-width: 320px;
+  width: 100%;
+  height: auto;
+}
+
+/* Conteúdo Central */
+.hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+h1 {
+  color: var(--color-accent);
+  font-size: 32px;
+  margin: 0;
+}
+
+.title-highlight {
+  color: var(--color-accent);
+  font-size: 48px; 
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.hero-content p {
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--color-text);
+  max-width: 400px;
+}
+
+/* Botão Iniciar (Hero) */
+.btn-start {
+  margin-top: 32px;
+  padding: 16px 60px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-start:hover {
+  background-color: var(--color-secondary);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Footer */
+.footer {
+  width: 100%;
+  padding: 20px 0;
+  text-align: center; 
+  font-size: 14px;
+  color: var(--color-accent);
+  border-top: 1px solid var(--color-accent);
+  background-color: var(--color-bg);
+}
+
+/* RESPONSIVO */
+@media (max-width: 1024px) {
+  .header-start, .hero {
+    padding: 20px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-start {
+    padding: 20px;
+  }
+  
+  .hero {
+    flex-direction: column;
+    padding: 40px 20px;
+    gap: 40px;
+  }
+
+  .hero-image {
+    justify-content: center !important;
+  }
+
+  .hero-image img {
+    max-width: 200px;
+  }
+
+  .title-highlight {
+    font-size: 36px;
+  }
+}

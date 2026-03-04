@@ -1,0 +1,178 @@
+
+
+/* Container */
+.forgot-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+}
+
+/* Header */
+.Cabecalho {
+  width: 100%;
+}
+
+.header {
+  height: 80px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 60px;
+}
+
+.btn-header {
+  padding: 10px 24px;
+  background-color: transparent;
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-header:hover {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+/* Card Principal */
+.forgot-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  flex: 1;
+  padding: 40px;
+}
+
+/* Lado Esquerdo ( ao Login) */
+.forgot-left {
+  flex: 1;
+  max-width: 500px;
+  background-color: var(--color-secondary);
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  border-radius: 20px 0 0 20px;
+}
+
+.forgot-logo {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  margin-bottom: 20px;
+  object-fit: contain;
+}
+
+.forgot-left h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.forgot-left p {
+  font-size: 18px;
+  opacity: 0.9;
+  text-align: center;
+}
+
+/* Lado Direito */
+.forgot-right {
+  flex: 1;
+  max-width: 500px;
+  background-color: var(--color-white);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  border-radius: 0 20px 20px 0;
+}
+
+.forgot-right h2 {
+  margin-bottom: 10px;
+  color: var(--color-text);
+}
+
+.instruction-text {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
+  max-width: 320px;
+}
+
+/* Formulário */
+.forgot-form {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.forgot-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: var(--color-text);
+  text-align: left;
+}
+
+.forgot-form input {
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Botão Enviar */
+.btn-send {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--color-primary);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-send:hover {
+  background-color: var(--color-secondary);
+}
+
+/* Responsivo */
+@media (max-width: 850px) {
+  .forgot-card {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .forgot-left, .forgot-right {
+    max-width: 100%;
+    min-height: auto;
+  }
+  
+  .forgot-left {
+    border-radius: 20px 20px 0 0;
+    padding: 30px;
+  }
+  
+  .forgot-right {
+    border-radius: 0 0 20px 20px;
+  }
+}
