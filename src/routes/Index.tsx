@@ -1,18 +1,38 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 
 import Home from "../pages/PortalLogin/Home/Index";
 import PortalLogin from "../pages/PortalLogin/Login/Index";
 import LayoutPortalLogin from "../layout/LayoutPortalLogin/Index";
 import EsqueciSenha from "../pages/PortalLogin/EsqueciSenha/Index";
 
+//Rotas do sistema interno
+import LayoutSistema from "../layout/LayoutSistema/Index";
+import Dashboard from "../pages/PortalSistema/Dashboard/Index";
+
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/portallogin" element={<LayoutPortalLogin />}>
+      {/* Rota para redirecionar para o portal de login */}
+      <Route path="/" element={<Navigate to="/portallogin" replace />} />
+        <Route path="/portallogin" element={<LayoutPortalLogin />}>
         <Route index element={<Home />} />
         <Route path="login" element={<PortalLogin />} />
         <Route path="esqueci-senha" element={<EsqueciSenha />} />
       </Route>
+
+      {/*Rotas para o sitema interno */}
+      <Route path="/sistemaQR" element={<LayoutSistema />}>
+        {/*Rotas filhas do sistema interno */}
+        <Route index element={<Navigate to="dashboard" replace />} />
+        <Route path="dashboard" element={<Dashboard />} />
+
+      
+      </Route>
+
+      {/* Rota para lidar com páginas não encontradas */}
+      <Route path="*" element={<h1>Página não encontrada (404)</h1>} />
+
     </Routes>
   );
 }

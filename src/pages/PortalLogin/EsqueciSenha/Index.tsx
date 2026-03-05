@@ -7,11 +7,11 @@ export default function EsqueciSenha() {
   const navigate = useNavigate();
 
   // lógica de integração com o backend para envio do link de recuperação
-const handleRecuperar = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRecuperar = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     alert("Enviamos um link de recuperação para o seu e-mail!");
-    navigate("../login");
-};
+    navigate("/portallogin/login");
+  };
 
   return (
     <div className="forgot-container">
@@ -19,13 +19,13 @@ const handleRecuperar = (e: React.FormEvent<HTMLFormElement>) => {
       {/* HEADER */}
       <div className="Cabecalho">
         <header className="header">
-           <div style={{flex: 1}}></div> 
-           <button 
-             className="btn-header"
-             onClick={() => navigate("../login")} 
-           >
-             Voltar ao Login
-           </button>
+          <div style={{flex: 1}}></div> 
+          <button 
+            className="btn-header"
+            onClick={() => navigate("/portallogin/login")} 
+          >
+            Voltar ao Login
+          </button>
         </header>
       </div>
 

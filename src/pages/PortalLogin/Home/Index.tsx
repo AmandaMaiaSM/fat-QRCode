@@ -16,9 +16,9 @@ export  default function Home() {
         <img src={qrCodeImg} alt="QR Presença" className="logo-img" />
         <button 
           className="btn-header"
-          onClick={() => navigate("../login")}
+          onClick={() => navigate("/portallogin/login")}
         >
-            Iniciar
+          Iniciar
         </button>
       </header>
 
@@ -41,9 +41,9 @@ export  default function Home() {
 
           <button 
             className="btn-start" 
-            onClick={() => navigate("../login")}
+             onClick={() => navigate("/portallogin/login")}
             >
-                Iniciar
+              Iniciar
             </button>
         </div>
 

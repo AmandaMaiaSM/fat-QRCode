@@ -53,7 +53,7 @@ export default function Login() {
                 <input type="checkbox" />
                 Lembrar-me
               </label>
-              <NavLink to="../esqueci-senha">Esqueci a senha</NavLink>
+              <NavLink to="/portallogin/esqueci-senha">Esqueci a senha</NavLink>
             </div>
 
             <button type="submit" className="btn-login">
