@@ -1,16 +1,16 @@
-
-/* Container principal do layout */
-.layout-login {
+/* Container principal do sistema */
+.layout-sistema {
+  display: flex;
   min-height: 100vh;
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: var(--color-bg);
 }
 
-/* Área onde as páginas serão renderizadas */
-.layout-login-main {
-  width: 100%;
-  box-sizing: border-box;
+/* Área do conteúdo (lado direito) */
+.Layout-main {
+  flex: 1;
+  padding: 30px 40px;
+  transition: margin-left 0.3s ease;
+  overflow-y: auto;
 }
+

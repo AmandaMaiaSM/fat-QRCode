@@ -37,7 +37,7 @@ export default function SiderBar() {
           {activeMenu && <span>Dashboard</span>}
         </NavLink>
         
-        <NavLink title="Meus Eventos" to="/sistemaQR/Meus-Eventos" className={navClass}>
+        <NavLink title="Meus Eventos" to="/sistemaQR/meus-eventos" className={navClass}>
           <CalendarDays className="nav-icon" />
           {activeMenu && <span>Meus Eventos</span>}
         </NavLink>

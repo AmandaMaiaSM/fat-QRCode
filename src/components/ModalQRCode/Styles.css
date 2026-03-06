@@ -1,0 +1,76 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-container {
+  background: var(--color-white);
+  padding: 32px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  max-width: 420px;
+  width: 92%;
+  animation: modalFade 0.25s ease;
+}
+
+.modal-container h3 {
+  color: var(--color-accent);
+}
+
+.qr-display-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 22px 0;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: white;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.btn-confirmar {
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-confirmar:hover {
+  transform: scale(1.03);
+}
+
+.btn-secondary {
+  background-color: #eee;
+  color: #333;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,39 @@
+.modal-header-simple h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.modal-body-simple {
+  padding: 20px 0;
+  color: #666;
+}
+
+.btn-confirmar-save {
+  background-color: #28a745; 
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-confirmar-delete {
+  background-color: #dc3545; 
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-cancelar {
+  background-color: #eee;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}

@@ -1,0 +1,72 @@
+.form-group {
+  text-align: left;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Container dos botões */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  width: 100%;
+}
+
+/* Botões padrão */
+.btn-actionSalvar,
+.btn-actionCancelar {
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  color: white;
+  height: 36px;
+  font-size: 1rem;
+  line-height: 1.2;
+  min-width: 120px;
+}
+
+/* Botão salvar */
+.btn-actionSalvar {
+  background-color: var(--color-primary);
+}
+
+/* Botão cancelar */
+.btn-actionCancelar {
+  background-color: var(--color-accent);
+}
+
+/* Hover */
+.btn-actionSalvar:hover,
+.btn-actionCancelar:hover {
+  background-color: var(--color-secondary);
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+
+  .modal-buttons {
+    flex-direction: column-reverse;
+  }
+
+  .btn-actionSalvar,
+  .btn-actionCancelar {
+    width: 100%;
+  }
+
+}

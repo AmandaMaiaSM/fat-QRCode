@@ -1,0 +1,109 @@
+/* Overlay escuro do fundo */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* Caixa do modal */
+.modal-container {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  animation: modalFade 0.25s ease;
+}
+
+/* Título */
+.modal-container h3 {
+  margin-bottom: 10px;
+  font-size: 22px;
+  color: var(--color-accent);
+}
+
+/* Texto */
+.modal-container p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Ícone decorativo */
+.save-icon {
+  width: 55px;
+  height: 55px;
+  background-color: #28a745;
+  border-radius: 50%;
+  margin: 0 auto 15px auto;
+}
+
+/* Área dos botões */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Botão cancelar */
+.btn-cancelar {
+  background-color: #eee;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-cancelar:hover {
+  background-color: #ddd;
+}
+
+/* Botão salvar */
+.btn-confirmar-save {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn-confirmar-save:hover {
+  background-color: #218838;
+}
+
+/* Animação */
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+
+  .modal-buttons {
+    flex-direction: column-reverse;
+  }
+
+  .btn-confirmar-save,
+  .btn-cancelar {
+    width: 100%;
+  }
+
+}

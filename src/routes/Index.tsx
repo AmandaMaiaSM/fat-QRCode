@@ -9,6 +9,8 @@ import EsqueciSenha from "../pages/PortalLogin/EsqueciSenha/Index";
 //Rotas do sistema interno
 import LayoutSistema from "../layout/LayoutSistema/Index";
 import Dashboard from "../pages/PortalSistema/Dashboard/Index";
+import MeusEventos from "../pages/PortalSistema/MeusEventos/Index";
+
 
 export default function AppRoutes() {
   return (
@@ -26,8 +28,7 @@ export default function AppRoutes() {
         {/*Rotas filhas do sistema interno */}
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
-
-      
+        <Route path="meus-eventos" element={<MeusEventos />} />
       </Route>
 
       {/* Rota para lidar com páginas não encontradas */}
