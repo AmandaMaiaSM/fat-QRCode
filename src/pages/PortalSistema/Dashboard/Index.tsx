@@ -50,7 +50,7 @@ const navigate = useNavigate();
         <section className="recent-events">
           <div className="section-header">
             <h2>Eventos Recentes</h2>
-            <button className="btn-link" onClick={() => navigate("/meusEventos")}>Ver todos</button>
+            <button className="btn-link" onClick={() => navigate("/sistemaQR/meus-eventos")}>Ver todos</button>
           </div>
 
           <div className="table-container">

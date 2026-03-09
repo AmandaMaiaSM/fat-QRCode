@@ -42,22 +42,22 @@ export default function SiderBar() {
           {activeMenu && <span>Meus Eventos</span>}
         </NavLink>
         
-        <NavLink title="Criar Evento" to="/sistemaQR/Criar-Evento" className={navClass}>
+        <NavLink title="Criar Evento" to="/sistemaQR/criar-evento" className={navClass}>
           <Plus className="nav-icon" />
           {activeMenu && <span>Criar Evento</span>}
         </NavLink>
 
-        <NavLink title='Registrar Participante' to="/sistemaQR/Registrar-Participante" className={navClass}>
+        <NavLink title='Registrar Presenças' to="/sistemaQR/registrar-presencas" className={navClass}>
           <UserPen className="nav-icon" />
-          {activeMenu && <span>Registrar Participante</span>}
+          {activeMenu && <span>Registrar Presenças</span>}
         </NavLink>
 
-        <NavLink title='Emitir Certificado' to="/sistemaQR/Emitir-Certificado" className={navClass}>
+        <NavLink title='Emitir Certificado' to="/sistemaQR/emitir-certificado" className={navClass}>
           <IdCard className="nav-icon" />
           {activeMenu && <span>Emitir Certificado</span>}
         </NavLink>
 
-        <NavLink title='Configurações' to="/sistemaQR/Configuracoes" className={navClass}>  
+        <NavLink title='Configurações' to="/sistemaQR/configuracoes" className={navClass}>  
             <Settings className="nav-icon" />
             {activeMenu && <span>Configurações</span>}
         </NavLink>

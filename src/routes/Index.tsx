@@ -9,8 +9,11 @@ import EsqueciSenha from "../pages/PortalLogin/EsqueciSenha/Index";
 //Rotas do sistema interno
 import LayoutSistema from "../layout/LayoutSistema/Index";
 import Dashboard from "../pages/PortalSistema/Dashboard/Index";
-import MeusEventos from "../pages/PortalSistema/MeusEventos/Index";
+//import MeusEventos from "../pages/PortalSistema/MeusEventos/Index";
 
+import RegistrarPresencas from "../pages/PortalSistema/RegistrarPresencas/Index";
+import EmitirCertificado from "../pages/PortalSistema/EmitirCertificado/Index";
+import CriarEvento from "../pages/PortalSistema/CriarEvento/Index";
 
 export default function AppRoutes() {
   return (
@@ -28,7 +31,11 @@ export default function AppRoutes() {
         {/*Rotas filhas do sistema interno */}
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="meus-eventos" element={<MeusEventos />} />
+        {/* <Route path="meus-eventos" element={<MeusEventos />} /> */}
+        <Route path="registrar-presencas" element={<RegistrarPresencas />} />
+        <Route path="emitir-certificado" element={<EmitirCertificado />} />
+        <Route path="criar-evento" element={<CriarEvento />} />
+
       </Route>
 
       {/* Rota para lidar com páginas não encontradas */}

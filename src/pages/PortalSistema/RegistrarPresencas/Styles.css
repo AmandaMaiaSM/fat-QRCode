@@ -1,0 +1,142 @@
+/* 1. Layout Base */
+.registrar-presencas-container {     
+    display: flex;
+    height: 100vh;
+    width: 100vw; 
+    background-color: var(--color-bg, #f4f7f6);
+    overflow: hidden;
+}
+
+.registrar-presencas-main {
+    flex: 1; 
+    padding: 40px; 
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 2. Formulário e Cards */
+.form-section {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    width: 90%;
+    max-width: 900px;
+}
+
+.participante-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    animation: fadeIn 0.3s ease-in; 
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 3. Cabeçalhos Internos e Inputs */
+.participante-header {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e1e1e1;
+    padding-bottom: 10px;
+}
+
+.participante-header h2 {
+    font-size: 1.1rem;
+    color: #444;
+    margin: 0 !important;
+}
+
+.registrar-presenca-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+.registrar-presenca-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1.5px solid #e1e1e1;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box; 
+    transition: border-color 0.3s;
+}
+
+.registrar-presenca-form input:focus {
+    outline: none;
+    border-color: var(--color-primary, #c9a416);
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row div {
+    flex: 1;
+}
+
+/* Botão de Lixo (Remover) */
+.btn-remove {
+    background: #ffebee;
+    color: #c62828;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+
+.btn-remove:hover {
+    background: #ef9a9a;
+    transform: scale(1.05);
+}
+
+/* Container para espaçamento dos botões inferiores */
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+    margin-top: 30px;
+}
+
+.btn-add, .btn-save {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.btn-add {
+    background-color: var(--color-accent); 
+    color: #fff;
+}
+
+.btn-save {
+    background-color: var(--color-primary); 
+    color: #fff;
+}
+
+.btn-add:hover, .btn-save:hover {
+    background-color: var(--color-secondary);
+
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(168, 165, 120, 0.3);
+}
