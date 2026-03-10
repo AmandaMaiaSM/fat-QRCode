@@ -1,10 +1,9 @@
 /* 1. Layout Base */
 .registrar-presencas-container {     
     display: flex;
-    height: 100vh;
-    width: 100vw; 
-    background-color: var(--color-bg, #f4f7f6);
-    overflow: hidden;
+    height: 100vh; 
+    width: 100%; 
+    overflow: hidden; 
 }
 
 .registrar-presencas-main {
@@ -14,11 +13,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box; 
 }
 
 /* 2. Formulário e Cards */
 .form-section {
-    background-color: #fff;
+    
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -33,11 +33,6 @@
     margin-bottom: 20px;
     border: 1px solid #eee;
     animation: fadeIn 0.3s ease-in; 
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 /* 3. Cabeçalhos Internos e Inputs */
@@ -136,7 +131,11 @@
 
 .btn-add:hover, .btn-save:hover {
     background-color: var(--color-secondary);
-
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(168, 165, 120, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

@@ -14,6 +14,7 @@ import Dashboard from "../pages/PortalSistema/Dashboard/Index";
 import RegistrarPresencas from "../pages/PortalSistema/RegistrarPresencas/Index";
 import EmitirCertificado from "../pages/PortalSistema/EmitirCertificado/Index";
 import CriarEvento from "../pages/PortalSistema/CriarEvento/Index";
+import Configuracoes from "../pages/PortalSistema/Configuracao/Index";
 
 export default function AppRoutes() {
   return (
@@ -35,7 +36,7 @@ export default function AppRoutes() {
         <Route path="registrar-presencas" element={<RegistrarPresencas />} />
         <Route path="emitir-certificado" element={<EmitirCertificado />} />
         <Route path="criar-evento" element={<CriarEvento />} />
-
+        <Route path="configuracoes" element={<Configuracoes />} />
       </Route>
 
       {/* Rota para lidar com páginas não encontradas */}

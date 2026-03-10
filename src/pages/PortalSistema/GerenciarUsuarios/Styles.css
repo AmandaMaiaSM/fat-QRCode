@@ -1,0 +1,122 @@
+
+.admin-main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.admin-form-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.admin-form-card .card-header {
+    background: #fff;
+    padding: 1.5rem;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.admin-form-card .card-header h2 {
+    color: #1e293b;
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.dynamic-form {
+    padding: 2rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas */
+    gap: 1.5rem;
+}
+
+.input-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-block label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+.input-block input, .input-block select {
+    padding: 0.75rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.input-block input:focus {
+    border-color: #c9a416;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(201, 164, 22, 0.1);
+}
+
+/* Grupo de Email Especial */
+.email-input-group {
+    display: flex;
+    align-items: stretch;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.email-input-group input {
+    border: none !important;
+    flex: 1;
+}
+
+.domain-label {
+    background: #f1f5f9;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    color: #64748b;
+    font-weight: 500;
+    font-size: 0.85rem;
+    border-left: 1px solid #e2e8f0;
+}
+
+.form-footer {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-primary {
+    background: #c9a416;
+    color: white;
+    padding: 0.8rem 2.5rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #b08e12;
+    transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Responsividade para telas pequenas */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

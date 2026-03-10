@@ -1,0 +1,204 @@
+
+.dashboard-container {
+  display: flex; 
+  height: 100vh;
+  background-color: var(--color-bg);
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1; 
+  padding: 30px 40px;
+  overflow-y: auto;
+}
+
+
+/* Layout Geral */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+  gap: 30px;
+  padding-bottom: 40px;
+}
+
+/* Estilo dos Cards */
+.settings-card {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  overflow: hidden; 
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.card-header-settings {
+  background-color: #f8f9fa;
+  padding: 15px 25px;
+  border-bottom: 1px solid #eee;
+}
+
+.card-header-settings h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.card-body-settings {
+  padding: 25px;
+}
+
+/* Formulários */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.form-group input:focus {
+  border-color: var(--color-primary);
+}
+
+.input-disabled {
+  background-color: #f0f0f0;
+  color: #888;
+  cursor: not-allowed;
+}
+
+/* Botões */
+.btn-save {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.btn-save:hover {
+  opacity: 0.9;
+}
+
+.btn-save.outline {
+  background-color: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-save.outline:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Botão Switch (Interruptor) */
+.toggle-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.toggle-info strong {
+  display: block;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.toggle-info p {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
+
+/* CSS Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--color-primary);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 15px 0;
+}
+
+/* Zona de Perigo */
+.danger-zone {
+  border: 1px solid #ffcccc;
+}
+
+.danger-zone .card-header-settings {
+  background-color: #fff0f0;
+  color: #d32f2f;
+}
+
+.btn-delete {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-delete:hover {
+  background-color: #b71c1c;
+}

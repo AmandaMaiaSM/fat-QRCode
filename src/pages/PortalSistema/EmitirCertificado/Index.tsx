@@ -13,7 +13,6 @@ export default function EmitirCertificado() {
   const [selectedEvento, setSelectedEvento] = useState("");
   const [file, setFile] = useState<string | null>(null);
   const [textColor, setTextColor] = useState("#FFFFFF");
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Simulação de participantes

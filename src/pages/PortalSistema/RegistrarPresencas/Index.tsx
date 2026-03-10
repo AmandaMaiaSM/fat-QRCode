@@ -1,6 +1,5 @@
 import { useState } from "react";
 import './Styles.css';
-import { Sidebar } from "lucide-react";
 
 
 export default function RegistrarPresencas() {
@@ -21,14 +20,11 @@ export default function RegistrarPresencas() {
     }
     // Função para remover um participante
     const removerParticipante = (index: number) => {
-        const novaLista = [...participantes];
-        novaLista.splice(index, 1);
-        setParticipantes(novaLista);
-
+        // Só remove se houver mais de um participante
         if (participantes.length > 1) {
-            const novosParticipantes = [...participantes];
-            novosParticipantes.splice(index, 1);
-            setParticipantes(novosParticipantes);
+            const novaLista = [...participantes];
+            novaLista.splice(index, 1);
+            setParticipantes(novaLista);
         }
     };
 
