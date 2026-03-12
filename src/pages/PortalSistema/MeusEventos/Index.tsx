@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
 
-import ModalQRCode from "components/ModalQRCode/Index";
-import ModalConfirmacao from "components/ModalConfirmacao/Index";
-import ModalEditarEvento from "components/ModalEditarEvento/Index";
-import ModalDownload from "components/ModalDownload/Index";
+import ModalQRCode from "../../../components/ModalQRCode/Index";
+import ModalConfirmacao from "../../../components/ModalConfirmacao/Index";
+import ModalEditarEvento from "../../../components/ModalEditarEvento/Index";
+import ModalDownload from "../../../components/ModalDownload/Index";
+import {CirclePlus, Download, Eye, ListChecks, Pencil, QrCode, Trash2, X } from "lucide-react";
+
 
 
 import "./styles.css";
@@ -22,6 +24,12 @@ type Evento = {
   local: string;
   qrCodeValue?: string;
   participantes: Participante[];
+};
+
+type DadosEdicao = {
+    id: number | null;
+    nome: string;
+    data: string;
 };
 
 // --- DADOS FICTÍCIOS ---
@@ -53,29 +61,31 @@ export default function MeusEventos() {
 
     const [eventos, setEventos] = useState<Evento[]>(eventosIniciais);
     const [eventoSelecionado, setEventoSelecionado] = useState<Evento | null>(null);
-    const [showQRCodeModal, setShowQRCodeModal] = useState(false);
-    const [showConfirmacaoModal, setShowConfirmacaoModal] = useState(false);
-    const [showEditarModal, setShowEditarModal] = useState(false);
     const [showDownloadModal, setShowDownloadModal] = useState(false);
-
     const [novoParticipante, setNovoParticipante] = useState({ nome: "", email: "", hora: "" });
-    
     const [adicionarParticipanteAtivo, setAdicionarParticipanteAtivo] = useState(false);
-    const [dadosEdicao, setDadosEdicao] = useState<{ id: number | null; nome: string; data: string }>({ id: null, nome: "", data: "" });
+    const [dadosEdicao, setDadosEdicao] = useState<DadosEdicao>({ id: null, nome: '', data: '' });
     const [modalEditarAberto, setModalEditarAberto] = useState(false);
     const [modalExcluirAberto, setModalExcluirAberto] = useState(false);
     const [idParaExcluir, setIdParaExcluir] = useState<number | null>(null);
     const [idParticipanteEditando, setIdParticipanteEditando] = useState<number | null>(null);
     const [novoNomeParticipante, setNovoNomeParticipante] = useState("");
+    const [novoEmailParticipante, setNovoEmailParticipante] = useState("");
+    const [novaHoraParticipante, setNovaHoraParticipante] = useState("");
     const [modalAberto, setModalAberto] = useState(false);
     // Adicione estes estados junto com os outros useState
     const [qrValueSelecionado, setQrValueSelecionado] = useState("");
     const [nomeEventoQr, setNomeEventoQr] = useState("");
     const [modalQrAberto, setModalQrAberto] = useState(false);
+    const [termoPesquisa, setTermoPesquisa] = useState("");
 
-
-    
-    
+    //Funçao de busca 
+    const eventosFiltrados = useMemo(() => {
+        return eventos.filter(evento =>
+            evento.nome.toLowerCase().includes(termoPesquisa.toLowerCase())
+        );
+    }, [eventos, termoPesquisa]);
+        
     // Adicionar participante ao evento selecionado
     const adicionarParticipante = (p0: boolean) => {
         if(!novoParticipante.nome || !novoParticipante.email || !novoParticipante.hora) return;
@@ -126,7 +136,7 @@ export default function MeusEventos() {
     // LÓGICA DE FILTRAGEM  
 
     // FUNÇÕES DE AÇÃO
-      const handleAbrirEdicao = (evento: { id: any; nome: any; data: any; }) => {
+    const handleAbrirEdicao = (evento: Evento) => {
         setDadosEdicao({ id: evento.id, nome: evento.nome, data: evento.data });
         setModalEditarAberto(true);
     };
@@ -156,6 +166,8 @@ export default function MeusEventos() {
         setModalAberto(true);
         setIdParticipanteEditando(null);
         setNovoNomeParticipante("");
+        setNovoEmailParticipante("");
+        setNovaHoraParticipante("");
     };
 
     // Excluir participante
@@ -188,9 +200,16 @@ export default function MeusEventos() {
         });
     };
     // Editar nome do participante
-    const handleEditarParticipante = (idParticipante: number, nomeAtual: string) => {
+    const handleEditarParticipante = (
+        idParticipante: number,
+        nomeAtual: string,
+        emailAtual: string,
+        horaAtual: string
+    ) => {
         setIdParticipanteEditando(idParticipante);
         setNovoNomeParticipante(nomeAtual);
+        setNovoEmailParticipante(emailAtual);
+        setNovaHoraParticipante(horaAtual);
     };
     
     // Salvar nome editado do participante
@@ -203,7 +222,9 @@ export default function MeusEventos() {
                 return {
                     ...ev,
                     participantes: ev.participantes.map(p => 
-                        p.id === idParticipanteEditando ? { ...p, nome: novoNomeParticipante } : p
+                        p.id === idParticipanteEditando
+                            ? { ...p, nome: novoNomeParticipante, email: novoEmailParticipante, hora: novaHoraParticipante }
+                            : p
                     )
                 };
             }
@@ -216,7 +237,9 @@ export default function MeusEventos() {
             return {
                 ...evnt,
                 participantes: evnt.participantes.map(p => 
-                    p.id === idParticipanteEditando ? { ...p, nome: novoNomeParticipante } : p
+                    p.id === idParticipanteEditando
+                        ? { ...p, nome: novoNomeParticipante, email: novoEmailParticipante, hora: novaHoraParticipante }
+                        : p
                 )
             };
         });
@@ -224,11 +247,15 @@ export default function MeusEventos() {
         //  Limpa os estados de edição
         setIdParticipanteEditando(null);
         setNovoNomeParticipante("");
+        setNovoEmailParticipante("");
+        setNovaHoraParticipante("");
     };
 
     const handleCancelarEdicaoParticipante = () => {
         setIdParticipanteEditando(null);
         setNovoNomeParticipante("");
+        setNovoEmailParticipante("");
+        setNovaHoraParticipante("");
     };
 
    // Função para abrir modal de QR Code
@@ -250,8 +277,233 @@ export default function MeusEventos() {
                 <div className="search-bar">
                     <input type="text"
                         placeholder="Buscar por nome do evento..." 
+                        value={termoPesquisa}
+                        onChange={ (e) => setTermoPesquisa(e.target.value)}
                         />
                 </div>
+                
+                <div className="table-container">
+                    <table className="events-table">
+                        <thead>
+                            <tr>
+                                <th>Nome do Evento</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Quantidade de Participantes</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {eventosFiltrados.map(evento => (
+                                <tr key={evento.id}>
+                                    <td>{evento.nome}</td>
+                                    <td>{evento.data}</td>
+                                    <td>{evento.local}</td>
+                                    <td>
+                                        <span className="badge-count">
+                                             {evento.participantes?.length || 0} pessoas
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <button className="btn-action qr" onClick={() => handleVerQRCode(evento)} title="Ver QR Code">
+                                            <QrCode size={18} />
+                                        </button>
+
+                                        <button className="btn-action view"onClick={() => handleVerPresenca(evento)} title="Ver Lista">
+                                            <ListChecks  size={18} />
+                                        </button>
+
+                                        <button className="btn-action edit" onClick={() => handleAbrirEdicao(evento)} title="Editar Evento">
+                                            <Pencil size={18} />
+                                        </button>
+
+                                        <button className="btn-action delete" onClick={() => handleAbrirConfirmacao(evento.id)} title="Excluir">
+                                            <Trash2 size={18} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {eventosFiltrados.length === 0 && (
+                        <p className="empty-state">Nenhum evento encontrado. </p>
+                    )}
+                </div>
+                {/*Modal de lista de presença  */}
+                {modalAberto && eventoSelecionado && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h2>Lista de Presença - {eventoSelecionado.nome}</h2>
+                                <button className="btn-close" onClick={() => setModalAberto(false)}>
+                                    <X />
+                                </button>
+                            </div>
+
+                             {/* Formulário para adicionar participante (aparece só quando ativado) */}
+                             <div className="modal-body">
+                                <>
+                                    {adicionarParticipanteAtivo && (
+                                        <div className= {`add-participant-form ${adicionarParticipanteAtivo ? "active" : ""}`}>
+                                            <h2> Novo Participante </h2>
+                                            <br />
+
+                                            <label htmlFor="nome">Nome:</label>
+                                            <input 
+                                                type="text"
+                                                placeholder="Nome"
+                                                value={novoParticipante.nome}
+                                                onChange={e => setNovoParticipante({ ...novoParticipante, nome: e.target.value })}
+                                                className="input-Add-participante"
+                                            />
+                                            <label htmlFor="email">Email:</label>
+                                            <input 
+                                                type="email"    
+                                                placeholder="Email"
+                                                value={novoParticipante.email}
+                                                onChange={e => setNovoParticipante({ ...novoParticipante, email: e.target.value })}
+                                                className="input-Add-participante"
+                                            />
+                                            <label htmlFor="hora">Hora de Chegada:</label>
+                                            <input 
+                                                type="time"
+                                                placeholder="Hora (ex: 08:00)"
+                                                value={novoParticipante.hora}
+                                                onChange={e => setNovoParticipante({ ...novoParticipante, hora: e.target.value })}
+                                                className="input-Add-participante"
+                                            />
+                                            <div className="add-participante-actions">
+                                                <button className="btn-save" onClick={() => adicionarParticipante(false)}>Adicionar</button>
+                                                <button className="btn-cancel" onClick={handleCancelarAdicionarParticipante}>Cancelar</button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {eventoSelecionado.participantes.length > 0 ? (
+                                        <table className="attendess-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nome</th>
+                                                    <th>Email</th>
+                                                    <th>Hora de Chegada</th>
+                                                    <th>Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="participantes-table-body">
+                                                {eventoSelecionado.participantes.map(pessoa => (
+                                                    //
+                                                    <tr key={pessoa.id}>
+                                                            <td>
+                                                                {idParticipanteEditando === pessoa.id ? (
+                                                                    <input
+                                                                        type="text"
+                                                                        value={novoNomeParticipante}
+                                                                        onChange={e => setNovoNomeParticipante(e.target.value)}
+                                                                        className="EditarNome"
+                                                                    />
+                                                                ) : (
+                                                                    pessoa.nome
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {idParticipanteEditando === pessoa.id ? (
+                                                                    <input
+                                                                        type="email"
+                                                                        value={novoEmailParticipante}
+                                                                        onChange={e => setNovoEmailParticipante(e.target.value)}
+                                                                    />
+                                                                ) : (
+                                                                    pessoa.email
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {idParticipanteEditando === pessoa.id ? (
+                                                                    <input
+                                                                        type="time"
+                                                                        value={novaHoraParticipante}
+                                                                        onChange={e => setNovaHoraParticipante(e.target.value)}
+                                                                    />
+                                                                ) : (
+                                                                    pessoa.hora
+                                                                )}
+                                                            </td>
+
+                                                        <td>
+                                                            {idParticipanteEditando === pessoa.id ? (
+                                                                <>
+                                                                    <button className="btn-save" onClick={salvarNomeParticipante}>Salvar</button>
+                                                                    <button className="btn-cancel" onClick={handleCancelarEdicaoParticipante}>Cancelar</button>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <button className="btn-action"
+                                                                        title="Editar"
+                                                                        style={{marginLeft: 8}}
+                                                                        onClick={() => handleEditarParticipante(pessoa.id, pessoa.nome, pessoa.email, pessoa.hora)}
+                                                                    >
+                                                                        <Pencil size={16} />
+                                                                    </button>
+                                                                    <button className="btn-action"
+                                                                        title="Adicionar"
+                                                                        onClick={() => handleAbrirAdicionarParticipante(pessoa)}
+                                                                    >
+                                                                        <CirclePlus/>
+                                                                    </button>
+                                                                    <button className="btn-action"
+                                                                        title="Excluir"
+                                                                        onClick={() => handleExcluirParticipante(pessoa.id)}
+                                                                    >
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                </>
+                                                            )}
+                                                        </td>
+                                                    </tr>          
+                                                ))}
+                                                {/* Linhas da tabela de participantes */}
+                                            </tbody>
+                                        </table>
+                                    ) : (
+                                        <p className="empty-state">Ninguém realizou check-in ainda.</p>
+                                    )}
+                                </>
+                            </div>
+                            <div className="modal-footer">
+                                <button 
+                                    className="btn-action" 
+                                    onClick={() => setShowDownloadModal(true)}
+                                    >
+                                        Baixar Lista
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {/* Modaois */}
+                <ModalConfirmacao
+                    isOpen={modalExcluirAberto}
+                    onClose={() => setModalExcluirAberto(false)}
+                    onConfirm={confirmarExclusao}
+                    mensagem="Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita."
+                />
+                <ModalEditarEvento
+                    isOpen={modalEditarAberto}
+                    onClose={() => setModalEditarAberto(false)} 
+                    onSave={salvarEdicao}
+                    dadosEdicao={dadosEdicao}
+                    setDadosEdicao={setDadosEdicao}
+                />
+                <ModalQRCode 
+                    isOpen={modalQrAberto} 
+                    onClose={() => setModalQrAberto(false)} 
+                    qrValue={qrValueSelecionado}
+                    nomeEvento={nomeEventoQr}
+                />
+                <ModalDownload 
+                    isOpen={showDownloadModal}
+                    onClose={() => setShowDownloadModal(false)}
+                />
 
             </main >
         </div>

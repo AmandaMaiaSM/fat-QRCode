@@ -3,6 +3,7 @@ import './styles.css';
 interface DadosEdicao {
   nome: string;
   data: string;
+  id: number | null;
 }
 
 interface ModalEditarEventoProps {

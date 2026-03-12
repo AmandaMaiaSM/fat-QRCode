@@ -237,9 +237,8 @@
 
 .participantes-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
-  table-layout: fixed;
+  border-collapse: collapse;
+  table-layout: auto;
 }
 
 /* Alinhamento padrão: Centralizado */
@@ -254,17 +253,13 @@
 .participantes-table td:first-child {
   text-align: left;
   padding-left: 25px;
-  width: 60%;
+  width: 75%;
 }
 
 
 .participantes-table td:last-child {
-  display: flex;        
-  justify-content: center;
-  align-items: center;     
-  gap: 12px;               
-  border-radius: 0 8px 8px 0; 
-  min-height: 70px;      
+  width: 25%;
+  text-align: center;
 }
 
 
@@ -272,14 +267,6 @@
   background: linear-gradient(90deg, #f0f7ff 0%, #f8fafc 100%);
   box-shadow: 0 2px 8px rgba(66, 153, 225, 0.1);
 }
-
-
-.participantes-table tr td:first-child {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
 .font-bold {
   font-weight: 700;
   color: #2d3748;

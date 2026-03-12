@@ -1,7 +1,7 @@
 import React, { useState } from "react";
  
 
-import ModalConfirmacao from "components/ModalConfirmacao/Index";
+import ModalConfirmacao from "../../../components/ModalConfirmacao/Index";
 import ModalExcluirConta from "../../../components/ModalExcluirConta/Index";
 import ModalSucessoConfig from "../../../components/ModalSucessoConfig/Index";
 import ModalSalvarConfig from "../../../components/ModalSalvarConfig/Index";

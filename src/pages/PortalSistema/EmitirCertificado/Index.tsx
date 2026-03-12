@@ -186,7 +186,7 @@ export default function EmitirCertificado() {
                     <tr>
                       <th>Nome</th>
                       <th>Download</th>
-                      <th>Ação</th>
+              
                     </tr>
                   </thead>
 
@@ -208,24 +208,6 @@ export default function EmitirCertificado() {
 
                             <Download className="btnImg"/>
 
-                          </button>
-
-                        </td>
-
-                        <td className="actions-cell">
-
-                          <button
-                            type="button"
-                            className="btn-action"
-                          >
-                            <Pen className="btnImg" />
-                          </button>
-
-                          <button
-                            type="button"
-                            className="btn-action delete"
-                          >
-                            <Trash2 className="btnImg" />
                           </button>
 
                         </td>
