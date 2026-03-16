@@ -1,9 +1,9 @@
-import './styles.css';
+import "./styles.css";
 
 interface DadosEdicao {
   nome: string;
   data: string;
-  id: number | null;
+  id: string | null;
 }
 
 interface ModalEditarEventoProps {
@@ -19,15 +19,13 @@ export default function ModalEditarEvento({
   onClose,
   onSave,
   dadosEdicao,
-  setDadosEdicao
+  setDadosEdicao,
 }: ModalEditarEventoProps) {
-
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay">
       <div className="modal-container">
-
         <h2>Editar Evento</h2>
 
         <div className="form-group">
@@ -38,7 +36,7 @@ export default function ModalEditarEvento({
             onChange={(e) =>
               setDadosEdicao({
                 ...dadosEdicao,
-                nome: e.target.value
+                nome: e.target.value,
               })
             }
           />
@@ -52,31 +50,22 @@ export default function ModalEditarEvento({
             onChange={(e) =>
               setDadosEdicao({
                 ...dadosEdicao,
-                data: e.target.value
+                data: e.target.value,
               })
             }
           />
         </div>
 
-       <div className="modal-buttons">
+        <div className="modal-buttons">
+          <button className="btn-actionCancelar" onClick={onClose}>
+            Cancelar
+          </button>
 
-            <button
-                className="btn-actionCancelar"
-                onClick={onClose}
-            >
-                Cancelar
-            </button>
-
-            <button
-                className="btn-actionSalvar"
-                onClick={onSave}
-            >
-                Salvar Alterações
-            </button>
-
-            </div>
-
+          <button className="btn-actionSalvar" onClick={onSave}>
+            Salvar Alterações
+          </button>
         </div>
+      </div>
     </div>
   );
 }

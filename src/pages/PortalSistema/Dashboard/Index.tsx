@@ -1,23 +1,35 @@
 import { useNavigate } from "react-router-dom";
-import './Styles.css';
+import "./Styles.css";
 
 export default function Dashboard() {
-const navigate = useNavigate();
-  
+  const navigate = useNavigate();
+
   // Dados fictícios para visualizar o layout (depois virão do Backend)
   const eventosRecentes = [
-    { id: 1, nome: "Treinamento Sefaz - Módulo 1", data: "28/01/2024", status: "Ativo" },
-    { id: 2, nome: "Workshop de Integração", data: "05/02/2024", status: "Agendado" },
-    { id: 3, nome: "Palestra: Segurança de Dados", data: "12/02/2024", status: "Concluído" },
+    {
+      id: 1,
+      nome: "Treinamento Sefaz - Módulo 1",
+      data: "28/01/2024",
+      status: "Ativo",
+    },
+    {
+      id: 2,
+      nome: "Workshop de Integração",
+      data: "05/02/2024",
+      status: "Agendado",
+    },
+    {
+      id: 3,
+      nome: "Palestra: Segurança de Dados",
+      data: "12/02/2024",
+      status: "Concluído",
+    },
   ];
 
   return (
-    <div className="dashboard-container">
-      
-
+    <div className="dashboard-container dashboard-page">
       {/* --- CONTEÚDO PRINCIPAL --- */}
-      <main className="main-content">
-        
+      <main className="main-content dashboard-main">
         {/* Topo */}
         <header className="top-bar">
           <div className="user-info">
@@ -50,7 +62,12 @@ const navigate = useNavigate();
         <section className="recent-events">
           <div className="section-header">
             <h2>Eventos Recentes</h2>
-            <button className="btn-link" onClick={() => navigate("/sistemaQR/meus-eventos")}>Ver todos</button>
+            <button
+              className="btn-link"
+              onClick={() => navigate("/sistemaQR/meus-eventos")}
+            >
+              Ver todos
+            </button>
           </div>
 
           <div className="table-container">
@@ -69,7 +86,9 @@ const navigate = useNavigate();
                     <td>{evento.nome}</td>
                     <td>{evento.data}</td>
                     <td>
-                      <span className={`status-badge ${evento.status.toLowerCase()}`}>
+                      <span
+                        className={`status-badge ${evento.status.toLowerCase()}`}
+                      >
                         {evento.status}
                       </span>
                     </td>
@@ -82,7 +101,6 @@ const navigate = useNavigate();
             </table>
           </div>
         </section>
-
       </main>
     </div>
   );

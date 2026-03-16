@@ -1,12 +1,12 @@
 /* Container principal do dashboard */
-.dashboard-container {
+.dashboard-page {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
 /* --- MAIN CONTENT --- */
-.main-content {
+.dashboard-main {
   padding: 30px 40px;
   width: 100%;
 }
@@ -55,8 +55,8 @@
   background-color: var(--color-white);
   padding: 24px;
   border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-  border: 1px solid rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
 .card-stat h3 {
@@ -88,7 +88,7 @@
   background-color: var(--color-white);
   padding: 24px;
   border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
 .section-header {
@@ -179,9 +179,8 @@ td {
 }
 
 /* Responsivo */
-@media (max-width: 768px) {
-
-  .main-content {
+@media (max-width: 900px) {
+  .dashboard-main {
     padding: 20px;
   }
 
@@ -195,4 +194,93 @@ td {
     gap: 10px;
   }
 
+  .recent-events {
+    padding: 14px 12px;
+  }
+
+  .table-container {
+    overflow: visible;
+  }
+
+  .table-container table {
+    width: 100%;
+  }
+
+  .table-container thead {
+    display: none;
+  }
+
+  .table-container table,
+  .table-container tbody,
+  .table-container tr,
+  .table-container td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-container tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .table-container tr {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 12px;
+    background: #fff;
+  }
+
+  .table-container td {
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .table-container td:last-child {
+    border-bottom: none;
+  }
+
+  .table-container td::before {
+    font-size: 13px;
+    font-weight: 700;
+    color: #666;
+  }
+
+  .table-container td:nth-child(1)::before {
+    content: "Nome";
+  }
+
+  .table-container td:nth-child(2)::before {
+    content: "Data";
+  }
+
+  .table-container td:nth-child(3)::before {
+    content: "Status";
+  }
+
+  .table-container td:nth-child(3) .status-badge {
+    display: inline-flex;
+    width: max-content;
+    justify-self: start;
+    align-self: center;
+  }
+
+  .table-container td:nth-child(4)::before {
+    content: "Ação";
+  }
+
+  .table-container td:nth-child(4) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .table-container td:nth-child(4)::before {
+    width: 92px;
+  }
 }

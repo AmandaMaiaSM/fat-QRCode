@@ -1,7 +1,8 @@
 /* 1. Layout Base */
 .emitir-certificado-container {
   display: flex;
-  height: 100vh;
+  min-height: 100%;
+  height: auto;
   width: 100%;
   table-layout: fixed;
   border-collapse: separate;
@@ -69,7 +70,6 @@
   font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
 }
 
-
 .form-group select:focus,
 .form-group input[type="file"]:focus {
   outline: none;
@@ -90,14 +90,16 @@
   transition: all 0.3s ease;
 }
 
-.Download, .en, .Trash2 {
-    color: var( --color-text);
-    width: 20px;
-    height: 20px;
+.Download,
+.en,
+.Trash2 {
+  color: var(--color-text);
+  width: 20px;
+  height: 20px;
 }
 .color-picker-group:hover {
-    border-color: #cbd5e0;
-    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.08);
+  border-color: #cbd5e0;
+  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.08);
 }
 
 .color-input {
@@ -166,7 +168,6 @@
 }
 
 .btn-action {
-  
   border: none;
   padding: 10px;
   border-radius: 8px;
@@ -192,7 +193,7 @@
 .btn-action.delete {
   background: #a8a578;
   border-color: #fc8181;
-  color: var( --cor-forte);
+  color: var(--cor-forte);
 }
 
 .btn-action.delete:hover {
@@ -218,20 +219,19 @@
   transform: translateY(-2px);
 }
 
-
 /* 6. Seção de Preview e Tabela */
 .preview-section {
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  width: 100%;         
+  align-items: center;
+  width: 100%;
   margin-top: 40px;
   padding-top: 35px;
 }
 
 .preview-header {
-  width: 100%;         
-  text-align: center;  
+  width: 100%;
+  text-align: center;
   margin-bottom: 25px;
 }
 
@@ -256,12 +256,10 @@
   width: 75%;
 }
 
-
 .participantes-table td:last-child {
   width: 25%;
   text-align: center;
 }
-
 
 .participantes-table tbody tr:hover {
   background: linear-gradient(90deg, #f0f7ff 0%, #f8fafc 100%);
@@ -283,20 +281,27 @@
 
 /* Responsividade */
 @media (max-width: 768px) {
+  .emitir-certificado-container {
+    display: block;
+  }
+
   .emitir-certificado-main {
-    padding: 20px;
+    padding: 16px 12px;
+    align-items: stretch;
   }
 
   .form-section {
-    padding: 25px;
-    width: 95%;
+    padding: 18px 12px;
+    width: 100%;
+  }
+
+  .page-header {
+    width: 100%;
   }
 
   .page-header h1 {
     font-size: 1.8rem;
   }
-
-
 
   .btn-emitir {
     padding: 14px 20px;
@@ -306,5 +311,77 @@
   .color-input {
     width: 40px;
     height: 40px;
+  }
+
+  .preview-section {
+    overflow: visible;
+  }
+
+  .participantes-table {
+    width: 100%;
+  }
+
+  .participantes-table thead {
+    display: none;
+  }
+
+  .participantes-table,
+  .participantes-table tbody,
+  .participantes-table tr,
+  .participantes-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .participantes-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .participantes-table tr {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 12px;
+    background: #fff;
+  }
+
+  .participantes-table td {
+    border-bottom: 1px dashed #eee;
+    padding: 8px 0;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .participantes-table td:first-child {
+    text-align: left;
+    padding-left: 0;
+    width: 100%;
+  }
+
+  .participantes-table td:last-child {
+    width: 100%;
+    border-bottom: none;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .participantes-table td::before {
+    font-size: 13px;
+    font-weight: 700;
+    color: #666;
+  }
+
+  .participantes-table td:nth-child(1)::before {
+    content: "Nome";
+  }
+
+  .participantes-table td:nth-child(2)::before {
+    content: "Download";
+    width: 96px;
   }
 }

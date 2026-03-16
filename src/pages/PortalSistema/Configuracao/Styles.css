@@ -1,22 +1,21 @@
-
-.dashboard-container {
-  display: flex; 
-  height: 100vh;
+.configuracao-page {
+  display: flex;
+  min-height: 100%;
+  height: auto;
   background-color: var(--color-bg);
-  overflow: hidden;
+  overflow: visible;
 }
 
-.main-content {
-  flex: 1; 
+.configuracao-main {
+  flex: 1;
   padding: 30px 40px;
-  overflow-y: hidden;
+  overflow-y: visible;
 }
-
 
 /* Layout Geral */
 .settings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 30px;
   padding-bottom: 40px;
 }
@@ -25,9 +24,9 @@
 .settings-card {
   background-color: var(--color-white);
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-  overflow: hidden; 
-  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .card-header-settings {
@@ -149,7 +148,7 @@
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 34px;
 }
 
@@ -161,7 +160,7 @@
   left: 4px;
   bottom: 4px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 50%;
 }
 
@@ -201,4 +200,30 @@ input:checked + .slider:before {
 
 .btn-delete:hover {
   background-color: #b71c1c;
+}
+
+@media (max-width: 992px) {
+  .configuracao-main {
+    padding: 18px 12px;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .card-body-settings {
+    padding: 16px;
+  }
+
+  .card-header-settings {
+    padding: 12px 16px;
+  }
+
+  .btn-save,
+  .btn-delete {
+    width: 100%;
+  }
 }

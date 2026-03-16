@@ -1,14 +1,16 @@
 /* Container geral */
-.dashboard-container {
+.meus-eventos-page {
   display: flex;
   width: 100%;
-  height: 100vh;
+  min-height: 100%;
+  height: auto;
 }
 
 /* Conteúdo principal */
-.main-content {
+.meus-eventos-main {
   flex: 1;
   padding: 30px;
+  min-width: 0;
 }
 
 /* Header da página */
@@ -39,11 +41,10 @@
   padding: 10px 14px;
   border-radius: 8px;
   border: 1px solid #ddd;
-  width: 260px;
+  width: 100%;
+  max-width: 320px;
   font-size: 14px;
 }
-
-
 
 /* Tabela */
 
@@ -52,12 +53,12 @@
   background-color: white;
   border-radius: 15px;
   padding: 20px;
-  overflow-x: auto; 
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 .events-table {
   width: 100%;
-  border-collapse: collapse; 
+  border-collapse: collapse;
 }
 
 .events-table th {
@@ -133,7 +134,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -202,9 +203,6 @@
   gap: 6px;
 }
 
-
-
-
 /* Botões */
 
 .btn-save {
@@ -220,7 +218,7 @@
 
 .btn-cancel {
   background: #ef4444;
-color: white;
+  color: white;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
@@ -242,6 +240,69 @@ color: white;
   border-bottom: 1px solid #eee;
 }
 
+@media (max-width: 640px) {
+  .modal-content {
+    width: 95%;
+    padding: 14px;
+    max-height: 90vh;
+  }
+
+  .attendess-table thead {
+    display: none;
+  }
+
+  .attendess-table,
+  .attendess-table tbody,
+  .attendess-table tr,
+  .attendess-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .attendess-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .attendess-table tr {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+
+  .attendess-table td {
+    border-bottom: 1px dashed #eee;
+    padding: 6px 0;
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 8px;
+    align-items: center;
+    word-break: break-word;
+    font-size: 14px;
+  }
+
+  .attendess-table td:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  .attendess-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: #5a5a5a;
+    font-size: 13px;
+  }
+
+  .attendess-table td:last-child::before {
+    display: none;
+  }
+}
+
 /* Footer modal */
 
 .modal-footer {
@@ -249,4 +310,103 @@ color: white;
   background-color: #f9f9f9;
   text-align: right;
   border-top: 1px solid #eee;
+}
+
+@media (max-width: 900px) {
+  .meus-eventos-main {
+    padding: 16px 12px;
+  }
+
+  .table-container {
+    padding: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .events-table {
+    width: 100%;
+  }
+
+  .events-table thead {
+    display: none;
+  }
+
+  .events-table,
+  .events-table tbody,
+  .events-table tr,
+  .events-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .events-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .events-table tr {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .events-table td {
+    border-bottom: 1px dashed #eee;
+    padding: 8px 0;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+    align-items: center;
+    word-break: break-word;
+  }
+
+  .events-table td:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .events-table td:nth-child(1)::before {
+    content: "Nome";
+  }
+  .events-table td:nth-child(2)::before {
+    content: "Data";
+  }
+  .events-table td:nth-child(3)::before {
+    content: "Local";
+  }
+  .events-table td:nth-child(4)::before {
+    content: "Participantes";
+  }
+  .events-table td:nth-child(5)::before {
+    content: "Ações";
+  }
+
+  .events-table td::before {
+    font-weight: 700;
+    color: #5a5a5a;
+    font-size: 13px;
+  }
+
+  .events-table td:nth-child(5) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .events-table td:nth-child(5)::before {
+    width: 100%;
+    margin-bottom: 2px;
+  }
+
+  .btn-action {
+    margin-right: 0;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 14px;
+  }
 }
