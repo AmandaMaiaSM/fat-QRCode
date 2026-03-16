@@ -1,16 +1,79 @@
-# React + Vite
+# FAT QRCode — Portal de Eventos e Presenças
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação web para gestão de eventos com foco em:
+- geração/uso de QR Code para check-in;
+- visualização e edição de participantes;
+- lista de presença;
+- registro manual de presenças com campos adicionais dinâmicos.
 
-Currently, two official plugins are available:
+## Status do Projeto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🚧 Em evolução (frontend funcional com dados locais e componentes de modal).
 
-## React Compiler
+## Funcionalidades implementadas (frontend)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Meus Eventos**
+  - listagem de eventos;
+  - busca por nome;
+  - abrir modal de **Lista de Presença**;
+  - ações por participante (editar, adicionar, excluir);
+  - modais auxiliares:
+    - confirmação de exclusão,
+    - edição de evento,
+    - exibição de QR Code,
+    - download.
 
-## Expanding the ESLint configuration
+- **Registrar Presenças**
+  - cadastro manual de participantes;
+  - campos padrão: `nome`, `email`, `telefone`;
+  - criação de **campos adicionais dinâmicos** (ex.: CPF, Matrícula, Setor);
+  - remoção de campos adicionais;
+  - múltiplos participantes no mesmo formulário.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Stack
+
+- **React**
+- **TypeScript**
+- **CSS**
+- **React Router** (navegação entre páginas)
+
+## Estrutura (resumo)
+
+```text
+fat-QRCode/
+├─ src/
+│  ├─ components/
+│  │  ├─ ModalEditarEvento/
+│  │  ├─ ModalConfirmacao/
+│  │  ├─ ModalQRCode/
+│  │  └─ ModalDownload/
+│  └─ pages/
+│     └─ PortalSistema/
+│        ├─ MeusEventos/
+│        └─ RegistrarPresencas/
+└─ ...
+```
+
+## Como rodar localmente (Windows / VS Code)
+
+```bash
+cd "c:\Users\amand\OneDrive\Desktop\QRCODE-VersaoF\fat-QRCode"
+npm install
+npm run dev
+```
+
+A aplicação iniciará em uma URL local (normalmente `http://localhost:5173`).
+
+## Scripts comuns
+
+```bash
+npm run dev
+npm run build
+npm run preview
+```
+## Resultado 
+
+
+## Autora
+
+Projeto desenvolvido por **Amanda Maia Soares Silva**.
