@@ -58,6 +58,11 @@ export default function SiderBar() {
           {activeMenu && <span>Emitir Certificado</span>}
         </NavLink>
 
+        <NavLink title='Emitir certificado 02' to="/sistemaQR/emitir-certificado-02" className={navClass}>
+          <IdCard className="nav-icon" />
+          {activeMenu && <span>Emitir Certificado 02</span>}
+        </NavLink>
+
         <NavLink title='Configurações' to="/sistemaQR/configuracoes" className={navClass}>  
             <Settings className="nav-icon" />
             {activeMenu && <span>Configurações</span>}
