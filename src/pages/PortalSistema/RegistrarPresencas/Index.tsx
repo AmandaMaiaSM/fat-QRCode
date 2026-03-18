@@ -98,22 +98,23 @@ export default function RegistrarPresencas() {
   };
 
   return (
-    <div className="registrar-presencas-container">
-      <main className="registrar-presencas-main">
-        <header className="page-header">
+    <div className="registrar-presencas-container-RegisP">
+
+      <main className="registrar-presencas-main-RegisP">
+        <header className="page-header-RegisP">
           <h1>Registrar Presenças</h1>
           <p>Registre as presenças manualmente abaixo.</p>
         </header>
 
-        <section className="form-section">
-          <form className="registrar-presenca-form" onSubmit={handleSubmit}>
+        <section className="form-section-RegisP">
+          <form className="registrar-presenca-form-RegisP" onSubmit={handleSubmit}>
             {/* ...existing code... */}
-            <div className="event-info">
+            <div className="event-info-RegisP">
               <h2>Informações do Evento</h2>
               <label htmlFor="evento">Nome do Evento:</label>
               <input type="text" id="evento" name="evento" placeholder="Nome do evento" required />
 
-              <div className="form-row">
+              <div className="form-row-RegisP">
                 <div>
                   <label htmlFor="data">Data:</label>
                   <input type="date" id="data" name="data" required />
@@ -126,13 +127,13 @@ export default function RegistrarPresencas() {
             </div>
 
             {/* NOVO: campos adicionais */}
-            <div className="event-info">
+            <div className="event-info-RegisP">
               <h2>Campos adicionais</h2>
-              <div className="form-row">
+              <div className="form-row-RegisP">
                 <div>
-                  <label htmlFor="novoCampo">Nome do campo:</label>
+                  <label htmlFor="novoCampo-RegisP">Nome do campo:</label>
                   <input
-                    id="novoCampo"
+                    id="novoCampo-RegisP"
                     type="text"
                     value={novoCampo}
                     onChange={(e) => setNovoCampo(e.target.value)}
@@ -141,16 +142,16 @@ export default function RegistrarPresencas() {
                 </div>
                 <div>
                   <label>&nbsp;</label>
-                  <button type="button" className="btn-add" onClick={handleAdicionarCampo}>
+                  <button type="button" className="btn-add-RegisP" onClick={handleAdicionarCampo}>
                     Adicionar campo
                   </button>
                 </div>
               </div>
 
               {camposAdicionais.length > 0 && (
-                <div className="campos-tags">
+                <div className="campos-tags-RegisP">
                   {camposAdicionais.map((campo) => (
-                    <span key={campo} className="campo-tag">
+                    <span key={campo} className="campo-tag-RegisP">
                       {campo}
                       <button type="button" onClick={() => handleRemoverCampo(campo)}>
                         ✖
@@ -162,13 +163,13 @@ export default function RegistrarPresencas() {
             </div>
 
             {participantes.map((participante, index) => (
-              <div key={index} className="participante-card">
-                <div className="participante-header">
+              <div key={index} className="participante-card-RegisP">
+                <div className="participante-header-RegisP">
                   <h2>Participante {index + 1}</h2>
                   {participantes.length > 1 && (
                     <button
                       type="button"
-                      className="btn-remove"
+                      className="btn-remove-RegisP"
                       onClick={() => removerParticipante(index)}
                       title="Remover este participante"
                     >
@@ -177,7 +178,7 @@ export default function RegistrarPresencas() {
                   )}
                 </div>
 
-                <div className="input-group">
+                <div className="input-group-RegisP">
                   <label>Nome Completo:</label>
                   <input
                     type="text"
@@ -227,12 +228,12 @@ export default function RegistrarPresencas() {
             ))}
 
             {/* ...existing code... */}
-            <div className="form-actions">
-              <button type="button" className="btn-add" onClick={adicionarParticipante}>
+            <div className="form-actions-RegisP">
+              <button type="button" className="btn-add-RegisP" onClick={adicionarParticipante}>
                 Adicionar Participante
               </button>
 
-              <button type="submit" className="btn-save">
+              <button type="submit" className="btn-save-RegisP">
                 Salvar Lista de Presença
               </button>
             </div>

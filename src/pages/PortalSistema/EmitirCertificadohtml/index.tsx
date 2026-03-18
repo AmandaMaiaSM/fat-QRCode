@@ -265,12 +265,12 @@ export default function EditorCertificado() {
 
   return (
 
-    <div className="editor-container">
+    <div className="editor-container-EmitirC">
 
         <h1>Editor de Certificado</h1>
 
         {/* CONTROLES */}
-        <div className="controls">
+        <div className="controls-EmitirC">
 
             <input
                 type="file"
@@ -325,7 +325,7 @@ export default function EditorCertificado() {
         </div>
 
         {eventoSelecionadoId && (
-            <div className="lista">
+            <div className="lista-EmitirC">
                 <h3>
                     Nomes para emissao {eventoSelecionado ? `- ${eventoSelecionado.nome}` : ""}
                 </h3>
@@ -344,16 +344,16 @@ export default function EditorCertificado() {
 
         {/* PREVIEW */}
             <div
-                    className="canvas-wrapper"
+                    className="canvas-wrapper-EmitirC"
                     ref={wrapperRef}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
                 >
 
-                <canvas ref={canvasRef} className="canvas" />
+                <canvas ref={canvasRef} className="canvas-EmitirC" />
 
                 <div
-                    className="nome-preview"
+                    className="nome-preview-EmitirC"
                     onMouseDown={handleMouseDown}
                     style={{
 
@@ -369,7 +369,7 @@ export default function EditorCertificado() {
             </div>
 
             {/* LISTA */}
-            <div className="lista">
+            <div className="lista-EmitirC">
                 {participantes.map((p, i) => (
 
                     <button key={p.id || `${p.nome}-${i}`} onClick={() => gerarCertificado(p.nome)}>
@@ -379,13 +379,13 @@ export default function EditorCertificado() {
             </div>
 
             <button
-                className="btn-lote"
+                className="btn-lote-EmitirC"
                 onClick={() => participantePreview && gerarCertificado(participantePreview.nome)}
             >
                 Baixar Certificado em Pré-visualização
             </button>
 
-            <button className="btn-lote" onClick={gerarTodos}>
+            <button className="btn-lote-EmitirC" onClick={gerarTodos}>
                 Gerar Todos
             </button>
 

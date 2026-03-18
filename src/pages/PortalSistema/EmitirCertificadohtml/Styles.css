@@ -1,31 +1,14 @@
-.editor-container {
-  --bg-page: #f1f4ef;
-  --panel: #ffffff;
-  --ink: #1f2937;
-  --muted: #5b6473;
-  --brand: #9a4b17;
-  --accent: #caa21f;
-  --accent-hover: #b68e14;
-  --line: #dde3dc;
-  --primary-btn: #1e4c8a;
-  --primary-btn-hover: #173e73;
 
-  padding: 28px;
-  text-align: center;
-  color: var(--ink);
-  font-family: "Segoe UI", sans-serif;
-  
-}
 
-.editor-container h1 {
+.editor-container-EmitirC h1 {
   margin: 0 0 18px;
   font-size: clamp(1.7rem, 2vw, 2.1rem);
-  color: var(--brand);
+  color: var(--cor-destaque);
   letter-spacing: 0.3px;
 }
 
-.controls {
-  background: var(--panel);
+.controls-EmitirC {
+  background: var(--color-white);
   border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(16, 34, 24, 0.06);
@@ -39,29 +22,29 @@
   max-width: 1240px;
 }
 
-.controls label {
+.controls-EmitirC label {
   font-size: 0.98rem;
   font-weight: 700;
   color: #374151;
 }
 
-.controls input[type="file"],
-.controls select,
-.controls input[type="range"],
-.controls input[type="color"] {
+.controls-EmitirC input[type="file"],
+.controls-EmitirC select,
+.controls-EmitirC input[type="range"],
+.controls-EmitirC input[type="color"] {
   border: 1px solid #cfd8cd;
   border-radius: 8px;
   padding: 6px 8px;
   background: #fff;
 }
 
-.controls input[type="color"] {
+.controls-EmitirC input[type="color"] {
   width: 46px;
   height: 34px;
   padding: 2px;
 }
 
-.controls button {
+.controls-EmitirC button {
   border: none;
   background: var(--accent);
   color: #fff;
@@ -72,17 +55,17 @@
   transition: background 0.18s ease, transform 0.18s ease;
 }
 
-.controls button:hover {
+.controls-EmitirC button:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
 }
 
-.controls span {
+.controls-EmitirC span {
   color: var(--muted);
   font-weight: 700;
 }
 
-.lista {
+.lista-EmitirC {
   margin: 18px auto;
   max-width: 1240px;
   background: #fff;
@@ -92,18 +75,18 @@
   padding: 16px;
 }
 
-.lista h3 {
+.lista-EmitirC h3 {
   margin: 0 0 8px;
   color: var(--brand);
   font-size: 1.35rem;
 }
 
-.lista p {
+.lista-EmitirC p {
   margin: 0;
   color: var(--muted);
 }
 
-.lista > div {
+.lista-EmitirC > div {
   margin: 6px auto;
   max-width: 680px;
   padding: 7px 10px;
@@ -113,7 +96,7 @@
   font-weight: 600;
 }
 
-.lista button {
+.lista-EmitirC button {
   margin: 5px;
   padding: 10px 14px;
   background: var(--primary-btn);
@@ -125,12 +108,12 @@
   transition: background 0.18s ease, transform 0.18s ease;
 }
 
-.lista button:hover {
+.lista-EmitirC button:hover {
   background: var(--primary-btn-hover);
   transform: translateY(-1px);
 }
 
-.canvas-wrapper {
+.canvas-wrapper-EmitirC {
   position: relative;
   width: fit-content;
   margin: 20px auto;
@@ -141,7 +124,7 @@
   box-shadow: 0 8px 28px rgba(20, 30, 24, 0.06);
 }
 
-.canvas {
+.canvas-EmitirC {
   border: 2px dashed #cfd7cc;
   border-radius: 10px;
   display: block;
@@ -150,7 +133,7 @@
   height: auto;
 }
 
-.nome-preview {
+.nome-preview-EmitirC {
   position: absolute;
   cursor: grab;
   font-weight: 800;
@@ -159,11 +142,11 @@
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
-.nome-preview:active {
+.nome-preview-EmitirC:active {
   cursor: grabbing;
 }
 
-.btn-lote {
+.btn-lote-EmitirC {
   margin: 10px 6px 0;
   padding: 13px 20px;
   background: linear-gradient(135deg, #d4af37, #bb911f);
@@ -176,41 +159,41 @@
   transition: transform 0.18s ease, filter 0.18s ease;
 }
 
-.btn-lote:hover {
+.btn-lote-EmitirC:hover {
   filter: brightness(0.98);
   transform: translateY(-1px);
 }
 
 @media (max-width: 900px) {
-  .editor-container {
+  .editor-container-EmitirC {
     padding: 18px 12px;
   }
 
-  .controls {
+  .controls-EmitirC {
     justify-content: flex-start;
     gap: 10px;
   }
 
-  .controls label {
+  .controls-EmitirC label {
     width: 100%;
     text-align: left;
     margin-top: 4px;
   }
 
-  .controls select,
-  .controls input[type="file"],
-  .controls input[type="range"] {
+  .controls-EmitirC select,
+  .controls-EmitirC input[type="file"],
+  .controls-EmitirC input[type="range"] {
     width: 100%;
   }
 
-  .controls > div {
+  .controls-EmitirC > div {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
 
-  .canvas-wrapper {
+  .canvas-wrapper-EmitirC {
     width: 100%;
     overflow-x: auto;
   }
