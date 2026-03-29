@@ -83,13 +83,23 @@
 .sidebar-footer .logout-btn {
   display: flex;
   align-items: center;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
   gap: 10px;
   color: var(--color-text);
   text-decoration: none;
   transition: color 0.2s ease;
+  cursor: pointer;
+  font: inherit;
 }
 .sidebar-footer .logout-btn:hover {
   color: var(--cor-forte);
+}
+
+.logout-icon {
+  min-width: 24px;
 }
 
 .sidebar.fechado .nav-item {
@@ -137,13 +147,22 @@
 
   .sidebar-header h2,
   .nav-item span,
-  .sidebar-footer {
+  .sidebar-footer span {
     display: none;
+  }
+
+  .sidebar-footer {
+    display: block;
+    padding: 12px 10px;
   }
 
   .nav-item,
   .sidebar.fechado .nav-item {
     padding: 10px;
+    justify-content: center;
+  }
+
+  .sidebar-footer .logout-btn {
     justify-content: center;
   }
 }
