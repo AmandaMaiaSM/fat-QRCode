@@ -113,9 +113,9 @@ export default function Login() {
               )}
             </label>
 
-            <div className="login-options">
+            {/* <div className="login-options">
               <NavLink to="/portallogin/esqueci-senha">Esqueci a senha</NavLink>
-            </div>
+            </div> */}
 
             {errors.root?.message && (
               <div className="form-error">{errors.root.message}</div>

@@ -1,0 +1,87 @@
+.my-events-page {
+  width: 100%;
+  padding: 30px;
+}
+
+.my-events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.my-events-header h1 {
+  margin: 0 0 8px;
+  color: #d4a017;
+  font-size: 28px;
+}
+
+.my-events-header p {
+  margin: 0;
+  color: #6f6f6f;
+}
+
+.my-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.my-events-feedback {
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+  color: #5e5e5e;
+  border: 1px solid #ece7d8;
+}
+
+.my-events-feedback.error {
+  background: #fef3f2;
+  color: #b42318;
+  border-color: #f3d2cf;
+}
+
+.my-events-create-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  background: #d4a017;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  white-space: nowrap;
+}
+
+.my-events-action {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.my-events-action.primary {
+  background: #d4a017;
+  color: #fff;
+}
+
+.my-events-action.secondary {
+  background: #f3efe2;
+  color: #6b5310;
+}
+
+.my-events-action.danger {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+@media (max-width: 900px) {
+  .my-events-page {
+    padding: 16px 12px;
+  }
+
+  .my-events-header {
+    flex-direction: column;
+  }
+}

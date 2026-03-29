@@ -117,6 +117,20 @@
   transform: translateY(-2px);
 }
 
+.btn-submit:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submit-error {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fef3f2;
+  color: #b42318;
+  font-size: 13px;
+}
+
 /* Sucesso */
 .sucesso-container {
   text-align: center;

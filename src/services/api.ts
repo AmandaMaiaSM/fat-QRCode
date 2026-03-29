@@ -73,6 +73,11 @@ export type HealthcheckResponse = {
   message: string;
 };
 
+export type ApiDataResponse<T> = {
+  message: string;
+  data: T;
+};
+
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -113,31 +118,37 @@ export const apiService = {
   },
 
   listarEventos() {
-    return request<Evento[]>("/eventos", {
+    return request<ApiDataResponse<Evento[]>>("/eventos", {
       method: "GET",
-    });
+    }).then((response) => response.data);
+  },
+
+  obterEventoPorId(eventoId: string) {
+    return request<ApiDataResponse<Evento>>(`/eventos/${eventoId}`, {
+      method: "GET",
+    }).then((response) => response.data);
   },
 
   criarEvento(data: CriarEventoPayload, token: string) {
-    return request<Evento>("/eventos", {
+    return request<ApiDataResponse<Evento>>("/eventos", {
       method: "POST",
       data,
       token,
-    });
+    }).then((response) => response.data);
   },
 
   inscreverParticipante(eventoId: string, data: InscreverParticipantePayload) {
-    return request<Evento>(`/eventos/${eventoId}/participantes`, {
+    return request<ApiDataResponse<Evento>>(`/eventos/${eventoId}/participantes`, {
       method: "POST",
       data,
-    });
+    }).then((response) => response.data);
   },
 
   excluirEvento(eventoId: string, token: string) {
-    return request<void>(`/eventos/${eventoId}`, {
+    return request<ApiDataResponse<Evento>>(`/eventos/${eventoId}`, {
       method: "DELETE",
       token,
-    });
+    }).then((response) => response.data);
   },
 };
 

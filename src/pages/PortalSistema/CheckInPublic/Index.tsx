@@ -1,94 +1,176 @@
+import { useEffect, useMemo, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+
+import {
+  apiService,
+  type Evento,
+  type InscreverParticipantePayload,
+} from "../../../services/api";
 import "./styles.css";
-
-type Participante = {
-  id: number;
-  nome: string;
-  email: string;
-  hora: string;
-  [key: string]: string | number; // Permite campos extras dinâmicos
-};
-
-type Campo = {
-  id: number;
-  label: string;
-  name: string;
-};
-
-type Evento = {
-  id: string;
-  nome: string;
-  data: string;
-  hora: string;
-  local: string;
-  descricao?: string;
-  participantes: Participante[];
-  camposPersonalizados?: Campo[];
-};
 
 type FormCheckIn = {
   nome: string;
   email: string;
-  [key: string]: string;
+  camposPersonalizados: Record<string, string>;
 };
+
+function getErrorMessage(error: unknown) {
+  if (!(error instanceof AxiosError)) {
+    return "Nao foi possivel registrar sua presenca.";
+  }
+
+  const responseData = error.response?.data;
+
+  if (typeof responseData?.message === "string") {
+    return responseData.message;
+  }
+
+  if (typeof responseData === "string") {
+    return responseData;
+  }
+
+  return "Nao foi possivel registrar sua presenca.";
+}
+
+function formatarDataHora(valor: string) {
+  const data = new Date(valor);
+
+  if (Number.isNaN(data.getTime())) {
+    return valor;
+  }
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(data);
+}
 
 export default function CheckInPublic() {
   const { eventoId } = useParams();
-  const [evento, setEvento] = useState<Evento | null>(null);
+  const [sucesso, setSucesso] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  const {
+    data: evento,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["checkin-evento", eventoId],
+    queryFn: () => apiService.obterEventoPorId(eventoId as string),
+    enabled: Boolean(eventoId),
+  });
+
+  const initialForm = useMemo<FormCheckIn>(() => {
+    const campos =
+      evento?.camposInscricao?.reduce<Record<string, string>>((acc, campo) => {
+        acc[campo.identificador] = "";
+        return acc;
+      }, {}) || {};
+
+    return {
+      nome: "",
+      email: "",
+      camposPersonalizados: campos,
+    };
+  }, [evento]);
+
   const [form, setForm] = useState<FormCheckIn>({
     nome: "",
     email: "",
+    camposPersonalizados: {},
   });
-  const [sucesso, setSucesso] = useState(false);
 
   useEffect(() => {
-    const eventos = JSON.parse(localStorage.getItem("meus_eventos") || "[]");
-    const eventoEncontrado = eventos.find((ev: Evento) => ev.id === eventoId);
-    setEvento(eventoEncontrado);
-  }, [eventoId]);
+    setForm(initialForm);
+  }, [initialForm]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const mutation = useMutation({
+    mutationFn: (payload: InscreverParticipantePayload) =>
+      apiService.inscreverParticipante(eventoId as string, payload),
+    onSuccess: () => {
+      setSucesso(true);
+      setSubmitError("");
+      setForm(initialForm);
+    },
+  });
+
+  const eventoAtual = evento as Evento | undefined;
+
+  const handleBaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCampoChange = (
+    identificador: string,
+    value: string,
+  ) => {
+    setForm((prev) => ({
+      ...prev,
+      camposPersonalizados: {
+        ...prev.camposPersonalizados,
+        [identificador]: value,
+      },
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!evento) return;
+    if (!eventoId || !eventoAtual) return;
 
-    const eventos = JSON.parse(localStorage.getItem("meus_eventos") || "[]");
+    const payload: InscreverParticipantePayload = {
+      nome: form.nome.trim(),
+      email: form.email.trim(),
+      camposPersonalizados: Object.fromEntries(
+        (eventoAtual.camposInscricao || []).map((campo) => [
+          campo.identificador,
+          form.camposPersonalizados[campo.identificador]?.trim() || "",
+        ]),
+      ),
+    };
 
-    const novosEventos = eventos.map((ev: Evento) => {
-      if (ev.id === eventoId) {
-        const { nome, email, ...camposExtras } = form;
-        const novoParticipante: Participante = {
-          id: Date.now(),
-          nome,
-          email,
-          hora: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          ...camposExtras,
-        };
-
-        return {
-          ...ev,
-          participantes: [...(ev.participantes || []), novoParticipante],
-        };
-      }
-      return ev;
-    });
-
-    localStorage.setItem("meus_eventos", JSON.stringify(novosEventos));
-    setSucesso(true);
+    try {
+      await mutation.mutateAsync(payload);
+    } catch (error) {
+      setSubmitError(getErrorMessage(error));
+    }
   };
 
-  if (!evento) {
+  const handleNovoRegistro = () => {
+    setSucesso(false);
+    setSubmitError("");
+    setForm(initialForm);
+  };
+
+  if (isLoading) {
     return (
       <div className="checkin-container">
-        <h2 className="error-msg">Evento não encontrado.</h2>
+        <div className="checkin-card">
+          <h2 className="error-msg">Carregando evento...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !eventoAtual) {
+    return (
+      <div className="checkin-container">
+        <div className="checkin-card">
+          <h2 className="error-msg">
+            {error instanceof Error
+              ? error.message
+              : "Evento nao encontrado."}
+          </h2>
+        </div>
       </div>
     );
   }
@@ -97,24 +179,21 @@ export default function CheckInPublic() {
     <div className="checkin-container">
       <div className="checkin-card">
         <header className="checkin-header">
-          <h1>{evento.nome}</h1>
+          <h1>{eventoAtual.nome}</h1>
           <p>
-            {evento.data} — {evento.local}
+            {formatarDataHora(eventoAtual.data)} - {eventoAtual.local || "Local nao informado"}
           </p>
-          {evento.descricao && (
-            <p className="checkin-descricao">{evento.descricao}</p>
+          {eventoAtual.descricao && (
+            <p className="checkin-descricao">{eventoAtual.descricao}</p>
           )}
         </header>
 
         {sucesso ? (
           <div className="sucesso-container">
-            <div className="icon-check">✓</div>
-            <h3>Presença confirmada!</h3>
-            <p>Sua participação foi registrada com sucesso.</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="btn-voltar"
-            >
+            <div className="icon-check">OK</div>
+            <h3>Presenca confirmada!</h3>
+            <p>Sua participacao foi registrada com sucesso.</p>
+            <button onClick={handleNovoRegistro} className="btn-voltar">
               Novo Registro
             </button>
           </div>
@@ -127,7 +206,7 @@ export default function CheckInPublic() {
                 name="nome"
                 placeholder="Ex: Amanda Maia"
                 value={form.nome}
-                onChange={handleChange}
+                onChange={handleBaseChange}
                 required
               />
             </div>
@@ -139,27 +218,35 @@ export default function CheckInPublic() {
                 name="email"
                 placeholder="seu@email.com"
                 value={form.email}
-                onChange={handleChange}
+                onChange={handleBaseChange}
                 required
               />
             </div>
 
-            {/* Campos Dinâmicos */}
-            {evento.camposPersonalizados?.map((campo) => (
-              <div className="input-group" key={campo.id}>
-                <label>{campo.label}</label>
+            {eventoAtual.camposInscricao?.map((campo) => (
+              <div className="input-group" key={campo.identificador}>
+                <label>{campo.rotulo}</label>
                 <input
                   type="text"
-                  name={campo.name}
-                  placeholder={`Digite seu ${campo.label.toLowerCase()}`}
-                  onChange={handleChange}
+                  name={campo.identificador}
+                  placeholder={`Digite ${campo.rotulo.toLowerCase()}`}
+                  value={form.camposPersonalizados[campo.identificador] || ""}
+                  onChange={(e) =>
+                    handleCampoChange(campo.identificador, e.target.value)
+                  }
                   required
                 />
               </div>
             ))}
 
-            <button type="submit" className="btn-submit">
-              Confirmar Presença
+            {submitError && <div className="submit-error">{submitError}</div>}
+
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? "Enviando..." : "Confirmar Presenca"}
             </button>
           </form>
         )}

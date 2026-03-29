@@ -6,7 +6,6 @@ import {
   IdCard,
   LayoutDashboard,
   Menu,
-  Plus,
   Settings,
   UserPen,
 } from "lucide-react";
@@ -42,11 +41,6 @@ export default function SiderBar() {
         <NavLink title="Meus Eventos" to="/sistemaQR/meus-eventos" className={navClass}>
           <CalendarDays className="nav-icon" />
           {activeMenu && <span>Meus Eventos</span>}
-        </NavLink>
-
-        <NavLink title="Criar Evento" to="/sistemaQR/criar-evento" className={navClass}>
-          <Plus className="nav-icon" />
-          {activeMenu && <span>Criar Evento</span>}
         </NavLink>
 
         <NavLink
