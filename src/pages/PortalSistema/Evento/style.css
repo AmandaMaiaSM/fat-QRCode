@@ -364,3 +364,20 @@
     color: #7b6b45;
   }
 }
+
+.evento-participantes-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.evento-secondary-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: #efe7d1;
+  color: #6b5310;
+  cursor: pointer;
+  font: inherit;
+  white-space: nowrap;
+}

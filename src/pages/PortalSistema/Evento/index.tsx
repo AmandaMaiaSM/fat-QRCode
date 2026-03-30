@@ -8,41 +8,19 @@ import {
 } from "@tanstack/react-table";
 import { useNavigate, useParams } from "react-router-dom";
 import QRCode from "react-qr-code";
+
 import { toPng } from "html-to-image";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 import { apiService, type EventoParticipante } from "../../../services/api";
 import ModalEditarEvento from "../../../components/ModalEditarEvento/Index";
 import ModalEditarParticipante from "../../../components/ModalEditarParticipante/Index";
 import "./style.css";
+import { formatarData, formatarHora } from "../../../services/data";
+import { baixarTemplateParticipantes } from "../../../services/excel";
 
 const participanteColumnHelper = createColumnHelper<EventoParticipante>();
-
-function formatarData(valor: string) {
-  const data = new Date(valor);
-
-  if (Number.isNaN(data.getTime())) {
-    return valor;
-  }
-
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(data);
-}
-
-function formatarHora(valor: string) {
-  const data = new Date(valor);
-
-  if (Number.isNaN(data.getTime())) {
-    return "--:--";
-  }
-
-  return new Intl.DateTimeFormat("pt-BR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(data);
-}
 
 export default function EventoDetalhes() {
   const navigate = useNavigate();
@@ -94,6 +72,26 @@ export default function EventoDetalhes() {
     link.click();
   };
 
+  // Função para baixar o template Excel dos participantes
+  const handleBaixarTemplate = () => {
+    if (!evento) return;
+
+    // Cabeçalhos: nome, email, depois identificadores dos campos personalizados
+    const headers = ["nome", "email", ...(evento.camposInscricao?.map(c => c.identificador) || [])];
+    // Cria uma linha de exemplo vazia
+    const data = [headers.reduce((acc, h) => ({ ...acc, [h]: "" }), {})];
+
+    // Cria a planilha
+    const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Participantes");
+
+    // Gera o arquivo e baixa
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    baixarTemplateParticipantes(evento);
+  };
+
   const handleEventoEditado = async () => {
     setIsEditarEventoOpen(false);
     await queryClient.invalidateQueries({
@@ -113,38 +111,38 @@ export default function EventoDetalhes() {
 
   const participanteColumns = evento
     ? [
-        participanteColumnHelper.accessor("nome", {
-          id: "nome",
-          header: "Nome",
-          cell: (info) => info.getValue(),
-        }),
-        participanteColumnHelper.accessor("email", {
-          id: "email",
-          header: "E-mail",
-          cell: (info) => info.getValue(),
-        }),
-        ...(evento.camposInscricao || []).map((campo) =>
-          participanteColumnHelper.display({
-            id: campo.identificador,
-            header: campo.rotulo,
-            cell: ({ row }) =>
-              row.original.camposPersonalizados?.[campo.identificador] || "-",
-          }),
-        ),
+      participanteColumnHelper.accessor("nome", {
+        id: "nome",
+        header: "Nome",
+        cell: (info) => info.getValue(),
+      }),
+      participanteColumnHelper.accessor("email", {
+        id: "email",
+        header: "E-mail",
+        cell: (info) => info.getValue(),
+      }),
+      ...(evento.camposInscricao || []).map((campo) =>
         participanteColumnHelper.display({
-          id: "acoes",
-          header: "Acoes",
-          cell: ({ row }) => (
-            <button
-              type="button"
-              className="evento-table-action"
-              onClick={() => setParticipanteParaEditar(row.original)}
-            >
-              Editar
-            </button>
-          ),
+          id: campo.identificador,
+          header: campo.rotulo,
+          cell: ({ row }) =>
+            row.original.camposPersonalizados?.[campo.identificador] || "-",
         }),
-      ]
+      ),
+      participanteColumnHelper.display({
+        id: "acoes",
+        header: "Acoes",
+        cell: ({ row }) => (
+          <button
+            type="button"
+            className="evento-table-action"
+            onClick={() => setParticipanteParaEditar(row.original)}
+          >
+            Editar
+          </button>
+        ),
+      }),
+    ]
     : [];
 
   const participantesTable = useReactTable({
@@ -297,7 +295,33 @@ export default function EventoDetalhes() {
           </div>
 
           <div className="evento-section">
-            <h3>Participantes</h3>
+            <div className="evento-section-header">
+              <h3>Participantes</h3>
+
+              <div className="evento-participantes-actions">
+                <button
+                  type="button"
+                  className="evento-secondary-btn"
+                  onClick={handleBaixarTemplate}
+                >
+                  Obter template
+                </button>
+
+                <button
+                  type="button"
+                  className="evento-secondary-btn"
+                >
+                  Importar
+                </button>
+
+                <button
+                  type="button"
+                  className="evento-copy-btn"
+                >
+                  Exportar
+                </button>
+              </div>
+            </div>
             {evento.participantes && evento.participantes.length > 0 ? (
               <div className="evento-participantes-table-wrapper">
                 <table className="evento-participantes-table">
@@ -309,9 +333,9 @@ export default function EventoDetalhes() {
                             {header.isPlaceholder
                               ? null
                               : flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext(),
-                                )}
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
                           </th>
                         ))}
                       </tr>
