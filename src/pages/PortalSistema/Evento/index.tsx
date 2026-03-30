@@ -1,11 +1,21 @@
 import { useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import { useNavigate, useParams } from "react-router-dom";
 import QRCode from "react-qr-code";
 import { toPng } from "html-to-image";
 
-import { apiService } from "../../../services/api";
+import { apiService, type EventoParticipante } from "../../../services/api";
+import ModalEditarEvento from "../../../components/ModalEditarEvento/Index";
+import ModalEditarParticipante from "../../../components/ModalEditarParticipante/Index";
 import "./style.css";
+
+const participanteColumnHelper = createColumnHelper<EventoParticipante>();
 
 function formatarData(valor: string) {
   const data = new Date(valor);
@@ -38,7 +48,11 @@ export default function EventoDetalhes() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [copiado, setCopiado] = useState(false);
+  const [isEditarEventoOpen, setIsEditarEventoOpen] = useState(false);
+  const [participanteParaEditar, setParticipanteParaEditar] =
+    useState<EventoParticipante | null>(null);
   const qrCodeRef = useRef<HTMLDivElement | null>(null);
+  const queryClient = useQueryClient();
 
   const {
     data: evento,
@@ -79,6 +93,65 @@ export default function EventoDetalhes() {
     link.href = dataUrl;
     link.click();
   };
+
+  const handleEventoEditado = async () => {
+    setIsEditarEventoOpen(false);
+    await queryClient.invalidateQueries({
+      queryKey: ["evento", id],
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ["eventos"],
+    });
+  };
+
+  const handleParticipanteEditado = async () => {
+    setParticipanteParaEditar(null);
+    await queryClient.invalidateQueries({
+      queryKey: ["evento", id],
+    });
+  };
+
+  const participanteColumns = evento
+    ? [
+        participanteColumnHelper.accessor("nome", {
+          id: "nome",
+          header: "Nome",
+          cell: (info) => info.getValue(),
+        }),
+        participanteColumnHelper.accessor("email", {
+          id: "email",
+          header: "E-mail",
+          cell: (info) => info.getValue(),
+        }),
+        ...(evento.camposInscricao || []).map((campo) =>
+          participanteColumnHelper.display({
+            id: campo.identificador,
+            header: campo.rotulo,
+            cell: ({ row }) =>
+              row.original.camposPersonalizados?.[campo.identificador] || "-",
+          }),
+        ),
+        participanteColumnHelper.display({
+          id: "acoes",
+          header: "Acoes",
+          cell: ({ row }) => (
+            <button
+              type="button"
+              className="evento-table-action"
+              onClick={() => setParticipanteParaEditar(row.original)}
+            >
+              Editar
+            </button>
+          ),
+        }),
+      ]
+    : [];
+
+  const participantesTable = useReactTable({
+    data: evento?.participantes || [],
+    columns: participanteColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
     <div className="evento-page">
@@ -135,6 +208,19 @@ export default function EventoDetalhes() {
           </div>
 
           <div className="evento-section">
+            <div className="evento-section-header">
+              <h3>Informacoes do evento</h3>
+              <button
+                type="button"
+                className="evento-edit-btn"
+                onClick={() => setIsEditarEventoOpen(true)}
+              >
+                Editar evento
+              </button>
+            </div>
+          </div>
+
+          <div className="evento-section">
             <h3>Descricao</h3>
             <p>{evento.descricao || "Sem descricao cadastrada."}</p>
           </div>
@@ -143,6 +229,14 @@ export default function EventoDetalhes() {
             <h3>Campos de inscricao</h3>
             {evento.camposInscricao && evento.camposInscricao.length > 0 ? (
               <div className="evento-campos-list">
+                <div className="evento-campo-item evento-campo-item-obrigatorio">
+                  <strong>Nome</strong>
+                  <span>obrigatorio</span>
+                </div>
+                <div className="evento-campo-item evento-campo-item-obrigatorio">
+                  <strong>E-mail</strong>
+                  <span>obrigatorio</span>
+                </div>
                 {evento.camposInscricao.map((campo) => (
                   <div
                     key={`${campo.identificador}-${campo.rotulo}`}
@@ -154,7 +248,16 @@ export default function EventoDetalhes() {
                 ))}
               </div>
             ) : (
-              <p>Nenhum campo extra configurado.</p>
+              <div className="evento-campos-list">
+                <div className="evento-campo-item evento-campo-item-obrigatorio">
+                  <strong>Nome</strong>
+                  <span>obrigatorio</span>
+                </div>
+                <div className="evento-campo-item evento-campo-item-obrigatorio">
+                  <strong>E-mail</strong>
+                  <span>obrigatorio</span>
+                </div>
+              </div>
             )}
           </div>
 
@@ -196,37 +299,43 @@ export default function EventoDetalhes() {
           <div className="evento-section">
             <h3>Participantes</h3>
             {evento.participantes && evento.participantes.length > 0 ? (
-              <div className="evento-participantes-list">
-                {evento.participantes.map((participante) => (
-                  <article
-                    key={participante._id || participante.id || participante.email}
-                    className="evento-participante-card"
-                  >
-                    <div className="evento-participante-topo">
-                      <div>
-                        <strong>{participante.nome}</strong>
-                        <span>{participante.email}</span>
-                      </div>
-                    </div>
+              <div className="evento-participantes-table-wrapper">
+                <table className="evento-participantes-table">
+                  <thead>
+                    {participantesTable.getHeaderGroups().map((headerGroup) => (
+                      <tr key={headerGroup.id}>
+                        {headerGroup.headers.map((header) => (
+                          <th key={header.id}>
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext(),
+                                )}
+                          </th>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
 
-                    {participante.camposPersonalizados &&
-                      Object.keys(participante.camposPersonalizados).length > 0 && (
-                        <div className="evento-participante-campos">
-                          {Object.entries(participante.camposPersonalizados).map(
-                            ([chave, valor]) => (
-                              <div
-                                key={`${participante.email}-${chave}`}
-                                className="evento-participante-campo"
-                              >
-                                <span>{chave}</span>
-                                <strong>{valor}</strong>
-                              </div>
-                            ),
-                          )}
-                        </div>
-                      )}
-                  </article>
-                ))}
+                  <tbody>
+                    {participantesTable.getRowModel().rows.map((row) => (
+                      <tr key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <td
+                            key={cell.id}
+                            data-label={String(cell.column.columnDef.header)}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             ) : (
               <p>Nenhum participante cadastrado neste evento.</p>
@@ -234,6 +343,22 @@ export default function EventoDetalhes() {
           </div>
         </section>
       )}
+
+      <ModalEditarEvento
+        isOpen={isEditarEventoOpen}
+        evento={evento || null}
+        onClose={() => setIsEditarEventoOpen(false)}
+        onSuccess={handleEventoEditado}
+      />
+
+      <ModalEditarParticipante
+        isOpen={Boolean(participanteParaEditar && id)}
+        eventoId={id || ""}
+        participante={participanteParaEditar}
+        camposInscricao={evento?.camposInscricao || []}
+        onClose={() => setParticipanteParaEditar(null)}
+        onSuccess={handleParticipanteEditado}
+      />
     </div>
   );
 }

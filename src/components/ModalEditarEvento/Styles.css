@@ -1,72 +1,143 @@
-.form-group {
-  text-align: left;
-  margin-bottom: 1rem;
+.modal-criar-evento-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1000;
+}
+
+.modal-criar-evento-container {
+  width: min(760px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+}
+
+.modal-criar-evento-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.modal-criar-evento-header h2 {
+  margin: 0 0 6px;
+  color: #2e2e2e;
+}
+
+.modal-criar-evento-header p {
+  margin: 0;
+  color: #6f6f6f;
+}
+
+.modal-close-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #555;
+}
+
+.modal-criar-evento-form {
   display: flex;
   flex-direction: column;
+  gap: 24px;
 }
 
-.form-group label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+.modal-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
 }
 
-.form-group input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
+.modal-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* Container dos botões */
-.modal-buttons {
+.modal-form-group-full {
+  grid-column: 1 / -1;
+}
+
+.modal-form-group span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #3c3c3c;
+}
+
+.modal-form-group input,
+.modal-form-group textarea {
+  border: 1px solid #d7d7d7;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.modal-form-error {
+  color: #b42318;
+  font-size: 12px;
+}
+
+.modal-submit-error {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fef3f2;
+  color: #b42318;
+  font-size: 13px;
+}
+
+.modal-actions {
   display: flex;
   justify-content: flex-end;
-  align-items: center;
   gap: 12px;
-  margin-top: 24px;
-  width: 100%;
 }
 
-/* Botões padrão */
-.btn-actionSalvar,
-.btn-actionCancelar {
-  padding: 6px 16px;
-  border-radius: 6px;
+.modal-cancel-btn,
+.modal-submit-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
   cursor: pointer;
-  transition: 0.2s;
-  color: white;
-  height: 36px;
-  font-size: 1rem;
-  line-height: 1.2;
-  min-width: 120px;
+  font: inherit;
 }
 
-/* Botão salvar */
-.btn-actionSalvar {
-  background-color: var(--color-primary);
+.modal-submit-btn {
+  background: #d4a017;
+  color: #fff;
 }
 
-/* Botão cancelar */
-.btn-actionCancelar {
-  background-color: var(--color-accent);
+.modal-cancel-btn {
+  background: #efe7d1;
+  color: #6b5310;
 }
 
-/* Hover */
-.btn-actionSalvar:hover,
-.btn-actionCancelar:hover {
-  background-color: var(--color-secondary);
+.modal-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-/* Responsivo */
-@media (max-width: 480px) {
-
-  .modal-buttons {
-    flex-direction: column-reverse;
+@media (max-width: 768px) {
+  .modal-criar-evento-overlay {
+    padding: 12px;
   }
 
-  .btn-actionSalvar,
-  .btn-actionCancelar {
-    width: 100%;
+  .modal-criar-evento-container {
+    padding: 18px;
   }
 
+  .modal-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

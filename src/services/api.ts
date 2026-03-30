@@ -63,11 +63,24 @@ export type CriarEventoPayload = {
   camposInscricao?: CampoInscricao[];
 };
 
+export type AtualizarEventoPayload = Partial<{
+  nome: string;
+  descricao: string;
+  local: string;
+  data: string;
+}>;
+
 export type InscreverParticipantePayload = {
   nome: string;
   email: string;
   camposPersonalizados: Record<string, string>;
 };
+
+export type AtualizarParticipantePayload = Partial<{
+  nome: string;
+  email: string;
+  camposPersonalizados: Record<string, string>;
+}>;
 
 export type HealthcheckResponse = {
   message: string;
@@ -137,11 +150,48 @@ export const apiService = {
     }).then((response) => response.data);
   },
 
+  atualizarEvento(
+    eventoId: string,
+    data: AtualizarEventoPayload,
+    token: string,
+  ) {
+    return request<ApiDataResponse<Evento>>(`/eventos/${eventoId}`, {
+      method: "PUT",
+      data,
+      token,
+    }).then((response) => response.data);
+  },
+
   inscreverParticipante(eventoId: string, data: InscreverParticipantePayload) {
     return request<ApiDataResponse<Evento>>(`/eventos/${eventoId}/participantes`, {
       method: "POST",
       data,
     }).then((response) => response.data);
+  },
+
+  obterParticipantePorId(eventoId: string, participanteId: string) {
+    return request<ApiDataResponse<EventoParticipante>>(
+      `/eventos/${eventoId}/participantes/${participanteId}`,
+      {
+        method: "GET",
+      },
+    ).then((response) => response.data);
+  },
+
+  atualizarParticipante(
+    eventoId: string,
+    participanteId: string,
+    data: AtualizarParticipantePayload,
+    token: string,
+  ) {
+    return request<ApiDataResponse<EventoParticipante>>(
+      `/eventos/${eventoId}/participantes/${participanteId}`,
+      {
+        method: "PUT",
+        data,
+        token,
+      },
+    ).then((response) => response.data);
   },
 
   excluirEvento(eventoId: string, token: string) {
