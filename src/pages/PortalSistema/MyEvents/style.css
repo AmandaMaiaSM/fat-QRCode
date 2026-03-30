@@ -24,8 +24,76 @@
 
 .my-events-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
+}
+
+.my-events-filters {
+  margin-bottom: 24px;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid #ece7d8;
+  background: linear-gradient(180deg, #fcfbf8 0%, #f7f4ed 100%);
+  box-shadow: 0 10px 24px rgba(84, 63, 12, 0.05);
+}
+
+.my-events-filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.my-events-filters-header h2 {
+  margin: 0 0 6px;
+  color: #2e2e2e;
+  font-size: 1.1rem;
+}
+
+.my-events-filters-header p {
+  margin: 0;
+  color: #6f6f6f;
+}
+
+.my-events-filters-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.my-events-filters-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.my-events-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.my-events-filter-group span {
+  color: #5e5e5e;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.my-events-filter-group input {
+  width: 100%;
+  border: 1px solid #dfd7c4;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  background: #fff;
+  color: #2e2e2e;
+}
+
+.my-events-filter-group input:focus {
+  outline: none;
+  border-color: #d4a017;
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.12);
 }
 
 .my-events-feedback {
@@ -50,6 +118,29 @@
   color: #fff;
   cursor: pointer;
   font: inherit;
+  white-space: nowrap;
+}
+
+.my-events-clear-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: #efe7d1;
+  color: #6b5310;
+  cursor: pointer;
+  font: inherit;
+  white-space: nowrap;
+}
+
+.my-events-search-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  background: #d4a017;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
   white-space: nowrap;
 }
 
@@ -83,5 +174,19 @@
 
   .my-events-header {
     flex-direction: column;
+  }
+
+  .my-events-filters-header {
+    flex-direction: column;
+  }
+
+  .my-events-filters-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .my-events-grid {
+    grid-template-columns: 1fr;
   }
 }

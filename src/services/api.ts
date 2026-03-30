@@ -91,6 +91,12 @@ export type ApiDataResponse<T> = {
   data: T;
 };
 
+export type ListarEventosFiltros = Partial<{
+  name: string;
+  startAt: string;
+  endAt: string;
+}>;
+
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -130,9 +136,10 @@ export const apiService = {
     });
   },
 
-  listarEventos() {
+  listarEventos(filtros?: ListarEventosFiltros) {
     return request<ApiDataResponse<Evento[]>>("/eventos", {
       method: "GET",
+      params: filtros,
     }).then((response) => response.data);
   },
 

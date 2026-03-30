@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -35,6 +35,16 @@ function formatarDataHora(valor: string) {
 export default function MeusEventosNovo() {
   const [isCriarEventoOpen, setIsCriarEventoOpen] = useState(false);
   const [eventoParaExcluir, setEventoParaExcluir] = useState<EventoApi | null>(null);
+  const [filtrosFormulario, setFiltrosFormulario] = useState({
+    name: "",
+    startAt: "",
+    endAt: "",
+  });
+  const [filtrosAplicados, setFiltrosAplicados] = useState({
+    name: "",
+    startAt: "",
+    endAt: "",
+  });
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -44,8 +54,15 @@ export default function MeusEventosNovo() {
     isError,
     error,
   } = useQuery({
-    queryKey: ["eventos"],
-    queryFn: apiService.listarEventos,
+    queryKey: ["eventos", filtrosAplicados],
+    queryFn: () =>
+      apiService.listarEventos({
+        ...(filtrosAplicados.name.trim()
+          ? { name: filtrosAplicados.name.trim() }
+          : {}),
+        ...(filtrosAplicados.startAt ? { startAt: filtrosAplicados.startAt } : {}),
+        ...(filtrosAplicados.endAt ? { endAt: filtrosAplicados.endAt } : {}),
+      }),
   });
 
   const handleEventoCriado = async (_eventoCriado: EventoApi) => {
@@ -81,6 +98,34 @@ export default function MeusEventosNovo() {
     });
   };
 
+  const handleAlterarFiltro = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    setFiltrosFormulario((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const handleBuscarFiltros = () => {
+    setFiltrosAplicados({
+      name: filtrosFormulario.name,
+      startAt: filtrosFormulario.startAt,
+      endAt: filtrosFormulario.endAt,
+    });
+  };
+
+  const handleLimparFiltros = () => {
+    const filtrosVazios = {
+      name: "",
+      startAt: "",
+      endAt: "",
+    };
+
+    setFiltrosFormulario(filtrosVazios);
+    setFiltrosAplicados(filtrosVazios);
+  };
+
   return (
     <div className="my-events-page">
       <header className="my-events-header">
@@ -96,6 +141,65 @@ export default function MeusEventosNovo() {
           Criar evento
         </button>
       </header>
+
+      <section className="my-events-filters">
+        <div className="my-events-filters-header">
+          <div>
+            <h2>Filtros</h2>
+            <p>Busque por nome e filtre os eventos por intervalo de datas.</p>
+          </div>
+          <button
+            type="button"
+            className="my-events-clear-btn"
+            onClick={handleLimparFiltros}
+          >
+            Limpar filtros
+          </button>
+        </div>
+
+        <div className="my-events-filters-grid">
+          <label className="my-events-filter-group">
+            <span>Nome do evento</span>
+            <input
+              type="text"
+              name="name"
+              value={filtrosFormulario.name}
+              onChange={handleAlterarFiltro}
+              placeholder="Ex.: Hackathon"
+            />
+          </label>
+
+          <label className="my-events-filter-group">
+            <span>Data inicial</span>
+            <input
+              type="date"
+              name="startAt"
+              value={filtrosFormulario.startAt}
+              onChange={handleAlterarFiltro}
+            />
+          </label>
+
+          <label className="my-events-filter-group">
+            <span>Data final</span>
+            <input
+              type="date"
+              name="endAt"
+              value={filtrosFormulario.endAt}
+              onChange={handleAlterarFiltro}
+            />
+          </label>
+        </div>
+
+        <div className="my-events-filters-actions">
+          <button
+            type="button"
+            className="my-events-search-btn"
+            onClick={handleBuscarFiltros}
+          >
+            Buscar
+          </button>
+        </div>
+      </section>
 
       {isLoading && (
         <div className="my-events-feedback">Carregando eventos...</div>
