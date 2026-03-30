@@ -169,9 +169,33 @@ export const apiService = {
     }).then((response) => response.data);
   },
 
+  adicionarVariosParticipantes(
+    eventoId: string,
+    participantes: InscreverParticipantePayload[],
+    token: string,
+  ) {
+    return request<ApiDataResponse<Evento>>(
+      `/eventos/${eventoId}/participantes/lote`,
+      {
+        method: "POST",
+        data: { participantes },
+        token,
+      },
+    ).then((response) => response.data);
+  },
+
   obterParticipantePorId(eventoId: string, participanteId: string) {
     return request<ApiDataResponse<EventoParticipante>>(
       `/eventos/${eventoId}/participantes/${participanteId}`,
+      {
+        method: "GET",
+      },
+    ).then((response) => response.data);
+  },
+
+  listarParticipantesDoEvento(eventoId: string) {
+    return request<ApiDataResponse<EventoParticipante[]>>(
+      `/eventos/${eventoId}/participantes`,
       {
         method: "GET",
       },
@@ -189,6 +213,20 @@ export const apiService = {
       {
         method: "PUT",
         data,
+        token,
+      },
+    ).then((response) => response.data);
+  },
+
+  excluirParticipante(
+    eventoId: string,
+    participanteId: string,
+    token: string,
+  ) {
+    return request<ApiDataResponse<Evento>>(
+      `/eventos/${eventoId}/participantes/${participanteId}`,
+      {
+        method: "DELETE",
         token,
       },
     ).then((response) => response.data);

@@ -1,0 +1,86 @@
+@import "../ModalEditarEvento/Styles.css";
+
+.modal-importar-participantes-container {
+  width: min(1100px, calc(100vw - 32px));
+  max-height: min(88vh, 820px);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-importar-resumo {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.modal-importar-pill {
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: #efe7d1;
+  color: #6b5310;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.modal-importar-pill-selected {
+  background: #fff5d6;
+  color: #a27500;
+}
+
+.modal-importar-table-wrapper {
+  margin-top: 4px;
+  border: 1px solid #ece7d8;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fcfbf8 0%, #f7f4ed 100%);
+  overflow: auto;
+  max-height: 52vh;
+}
+
+.modal-importar-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+}
+
+.modal-importar-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7b6b45;
+  border-bottom: 1px solid #e7deca;
+  background: #f7f2e6;
+}
+
+.modal-importar-table td {
+  padding: 14px 16px;
+  color: #2e2e2e;
+  border-bottom: 1px solid #efe7d8;
+  vertical-align: top;
+}
+
+.modal-importar-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.modal-importar-table input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #d4a017;
+}
+
+@media (max-width: 768px) {
+  .modal-importar-participantes-container {
+    width: min(100vw - 16px, 1000px);
+    max-height: calc(100vh - 16px);
+    padding: 20px;
+  }
+
+  .modal-importar-table {
+    min-width: 640px;
+  }
+}

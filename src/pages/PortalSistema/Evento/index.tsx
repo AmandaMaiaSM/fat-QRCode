@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRef, useState, type ChangeEvent } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createColumnHelper,
   flexRender,
@@ -8,17 +8,20 @@ import {
 } from "@tanstack/react-table";
 import { useNavigate, useParams } from "react-router-dom";
 import QRCode from "react-qr-code";
-
 import { toPng } from "html-to-image";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 
 import { apiService, type EventoParticipante } from "../../../services/api";
 import ModalEditarEvento from "../../../components/ModalEditarEvento/Index";
 import ModalEditarParticipante from "../../../components/ModalEditarParticipante/Index";
-import "./style.css";
+import ModalImportarParticipantes from "../../../components/ModalImportarParticipantes/Index";
+import ModalConfirmacao from "../../../components/ModalConfirmacao/Index";
 import { formatarData, formatarHora } from "../../../services/data";
-import { baixarTemplateParticipantes } from "../../../services/excel";
+import {
+  baixarTemplateParticipantes,
+  baixarParticipantesDoEventoEmExcel,
+  lerParticipantesDeExcel,
+} from "../../../services/excel";
+import "./style.css";
 
 const participanteColumnHelper = createColumnHelper<EventoParticipante>();
 
@@ -27,9 +30,23 @@ export default function EventoDetalhes() {
   const { id } = useParams();
   const [copiado, setCopiado] = useState(false);
   const [isEditarEventoOpen, setIsEditarEventoOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [participanteParaEditar, setParticipanteParaEditar] =
     useState<EventoParticipante | null>(null);
+  const [participanteParaRemover, setParticipanteParaRemover] =
+    useState<EventoParticipante | null>(null);
+  const [importacaoMensagem, setImportacaoMensagem] = useState<string | null>(
+    null,
+  );
+  const [participantesImportacao, setParticipantesImportacao] = useState<
+    Array<{
+      nome: string;
+      email: string;
+      camposPersonalizados: Record<string, string>;
+    }>
+  >([]);
   const qrCodeRef = useRef<HTMLDivElement | null>(null);
+  const importInputRef = useRef<HTMLInputElement | null>(null);
   const queryClient = useQueryClient();
 
   const {
@@ -43,9 +60,104 @@ export default function EventoDetalhes() {
     enabled: Boolean(id),
   });
 
-  const checkinUrl = id
-    ? `${window.location.origin}/checkin/${id}`
-    : "";
+  const checkinUrl = id ? `${window.location.origin}/checkin/${id}` : "";
+
+  const importarParticipantesMutation = useMutation({
+    mutationFn: async (
+      participantesSelecionados: Array<{
+        nome: string;
+        email: string;
+        camposPersonalizados: Record<string, string>;
+      }>,
+    ) => {
+      if (!id) {
+        throw new Error("Evento nao encontrado para importar participantes.");
+      }
+
+      const token = localStorage.getItem("auth_token");
+
+      if (!token) {
+        throw new Error(
+          "Voce precisa estar autenticado para importar participantes.",
+        );
+      }
+
+      if (participantesSelecionados.length === 0) {
+        throw new Error("Selecione ao menos um participante para importar.");
+      }
+
+      return apiService.adicionarVariosParticipantes(
+        id,
+        participantesSelecionados,
+        token,
+      );
+    },
+    onSuccess: async (_, participantesSelecionados) => {
+      setImportacaoMensagem(
+        `Importacao concluida com sucesso para ${participantesSelecionados.length} participante${participantesSelecionados.length === 1 ? "" : "s"}.`,
+      );
+      setIsImportModalOpen(false);
+      setParticipantesImportacao([]);
+      await queryClient.invalidateQueries({
+        queryKey: ["evento", id],
+      });
+    },
+    onError: (mutationError) => {
+      setImportacaoMensagem(
+        mutationError instanceof Error
+          ? mutationError.message
+          : "Nao foi possivel importar os participantes.",
+      );
+    },
+  });
+
+  const excluirParticipanteMutation = useMutation({
+    mutationFn: async (participanteId: string) => {
+      if (!id) {
+        throw new Error("Evento nao encontrado para remover participante.");
+      }
+
+      const token = localStorage.getItem("auth_token");
+
+      if (!token) {
+        throw new Error(
+          "Voce precisa estar autenticado para remover participantes.",
+        );
+      }
+
+      return apiService.excluirParticipante(id, participanteId, token);
+    },
+    onSuccess: async () => {
+      setParticipanteParaRemover(null);
+      await queryClient.invalidateQueries({
+        queryKey: ["evento", id],
+      });
+    },
+  });
+
+  const exportarParticipantesMutation = useMutation({
+    mutationFn: async () => {
+      if (!id || !evento) {
+        throw new Error("Evento nao encontrado para exportar participantes.");
+      }
+
+      const participantes = await apiService.listarParticipantesDoEvento(id);
+      baixarParticipantesDoEventoEmExcel(evento, participantes);
+      return participantes.length;
+    },
+    onSuccess: (quantidade) => {
+      setImportacaoMensagem(
+        `Exportacao concluida com sucesso para ${quantidade} participante${quantidade === 1 ? "" : "s"}.`,
+      );
+    },
+    onError: (mutationError) => {
+      setImportacaoMensagem(
+        mutationError instanceof Error
+          ? mutationError.message
+          : "Nao foi possivel exportar os participantes.",
+      );
+    },
+  });
 
   const handleCopiarLink = async () => {
     if (!checkinUrl) return;
@@ -72,24 +184,69 @@ export default function EventoDetalhes() {
     link.click();
   };
 
-  // Função para baixar o template Excel dos participantes
   const handleBaixarTemplate = () => {
     if (!evento) return;
 
-    // Cabeçalhos: nome, email, depois identificadores dos campos personalizados
-    const headers = ["nome", "email", ...(evento.camposInscricao?.map(c => c.identificador) || [])];
-    // Cria uma linha de exemplo vazia
-    const data = [headers.reduce((acc, h) => ({ ...acc, [h]: "" }), {})];
-
-    // Cria a planilha
-    const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Participantes");
-
-    // Gera o arquivo e baixa
-    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
     baixarTemplateParticipantes(evento);
+  };
+
+  const handleExportarParticipantes = async () => {
+    setImportacaoMensagem(null);
+    await exportarParticipantesMutation.mutateAsync();
+  };
+
+  const handleImportarArquivo = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setImportacaoMensagem(null);
+
+    try {
+      if (!evento) {
+        throw new Error("Evento nao encontrado para importar participantes.");
+      }
+
+      const participantes = await lerParticipantesDeExcel(file, evento);
+
+      if (participantes.length === 0) {
+        throw new Error(
+          "Nenhum participante valido foi encontrado na planilha.",
+        );
+      }
+
+      setParticipantesImportacao(participantes);
+      setIsImportModalOpen(true);
+    } catch (error) {
+      setImportacaoMensagem(
+        error instanceof Error
+          ? error.message
+          : "Nao foi possivel ler a planilha selecionada.",
+      );
+    } finally {
+      event.target.value = "";
+    }
+  };
+
+  const handleConfirmarImportacao = async (
+    participantesSelecionados: Array<{
+      nome: string;
+      email: string;
+      camposPersonalizados: Record<string, string>;
+    }>,
+  ) => {
+    await importarParticipantesMutation.mutateAsync(participantesSelecionados);
+  };
+
+  const handleFecharImportacao = () => {
+    if (importarParticipantesMutation.isPending) {
+      return;
+    }
+
+    setIsImportModalOpen(false);
+    setParticipantesImportacao([]);
   };
 
   const handleEventoEditado = async () => {
@@ -109,40 +266,61 @@ export default function EventoDetalhes() {
     });
   };
 
+  const handleConfirmarRemocaoParticipante = async () => {
+    const participanteId = String(
+      participanteParaRemover?._id || participanteParaRemover?.id || "",
+    );
+
+    if (!participanteId) {
+      return;
+    }
+
+    await excluirParticipanteMutation.mutateAsync(participanteId);
+  };
+
   const participanteColumns = evento
     ? [
-      participanteColumnHelper.accessor("nome", {
-        id: "nome",
-        header: "Nome",
-        cell: (info) => info.getValue(),
-      }),
-      participanteColumnHelper.accessor("email", {
-        id: "email",
-        header: "E-mail",
-        cell: (info) => info.getValue(),
-      }),
-      ...(evento.camposInscricao || []).map((campo) =>
-        participanteColumnHelper.display({
-          id: campo.identificador,
-          header: campo.rotulo,
-          cell: ({ row }) =>
-            row.original.camposPersonalizados?.[campo.identificador] || "-",
+        participanteColumnHelper.accessor("nome", {
+          id: "nome",
+          header: "Nome",
+          cell: (info) => info.getValue(),
         }),
-      ),
-      participanteColumnHelper.display({
-        id: "acoes",
-        header: "Acoes",
-        cell: ({ row }) => (
-          <button
-            type="button"
-            className="evento-table-action"
-            onClick={() => setParticipanteParaEditar(row.original)}
-          >
-            Editar
-          </button>
+        participanteColumnHelper.accessor("email", {
+          id: "email",
+          header: "E-mail",
+          cell: (info) => info.getValue(),
+        }),
+        ...(evento.camposInscricao || []).map((campo) =>
+          participanteColumnHelper.display({
+            id: campo.identificador,
+            header: campo.rotulo,
+            cell: ({ row }) =>
+              row.original.camposPersonalizados?.[campo.identificador] || "-",
+          }),
         ),
-      }),
-    ]
+        participanteColumnHelper.display({
+          id: "acoes",
+          header: "Acoes",
+          cell: ({ row }) => (
+            <div className="evento-table-actions">
+              <button
+                type="button"
+                className="evento-table-action"
+                onClick={() => setParticipanteParaEditar(row.original)}
+              >
+                Editar
+              </button>
+              <button
+                type="button"
+                className="evento-table-action evento-table-action-danger"
+                onClick={() => setParticipanteParaRemover(row.original)}
+              >
+                Remover
+              </button>
+            </div>
+          ),
+        }),
+      ]
     : [];
 
   const participantesTable = useReactTable({
@@ -225,38 +403,25 @@ export default function EventoDetalhes() {
 
           <div className="evento-section">
             <h3>Campos de inscricao</h3>
-            {evento.camposInscricao && evento.camposInscricao.length > 0 ? (
-              <div className="evento-campos-list">
-                <div className="evento-campo-item evento-campo-item-obrigatorio">
-                  <strong>Nome</strong>
-                  <span>obrigatorio</span>
-                </div>
-                <div className="evento-campo-item evento-campo-item-obrigatorio">
-                  <strong>E-mail</strong>
-                  <span>obrigatorio</span>
-                </div>
-                {evento.camposInscricao.map((campo) => (
-                  <div
-                    key={`${campo.identificador}-${campo.rotulo}`}
-                    className="evento-campo-item"
-                  >
-                    <strong>{campo.rotulo}</strong>
-                    <span>{campo.identificador}</span>
-                  </div>
-                ))}
+            <div className="evento-campos-list">
+              <div className="evento-campo-item evento-campo-item-obrigatorio">
+                <strong>Nome</strong>
+                <span>obrigatorio</span>
               </div>
-            ) : (
-              <div className="evento-campos-list">
-                <div className="evento-campo-item evento-campo-item-obrigatorio">
-                  <strong>Nome</strong>
-                  <span>obrigatorio</span>
-                </div>
-                <div className="evento-campo-item evento-campo-item-obrigatorio">
-                  <strong>E-mail</strong>
-                  <span>obrigatorio</span>
-                </div>
+              <div className="evento-campo-item evento-campo-item-obrigatorio">
+                <strong>E-mail</strong>
+                <span>obrigatorio</span>
               </div>
-            )}
+              {(evento.camposInscricao || []).map((campo) => (
+                <div
+                  key={`${campo.identificador}-${campo.rotulo}`}
+                  className="evento-campo-item"
+                >
+                  <strong>{campo.rotulo}</strong>
+                  <span>{campo.identificador}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="evento-section">
@@ -310,18 +475,43 @@ export default function EventoDetalhes() {
                 <button
                   type="button"
                   className="evento-secondary-btn"
+                  onClick={() => importInputRef.current?.click()}
+                  disabled={importarParticipantesMutation.isPending}
                 >
-                  Importar
+                  {importarParticipantesMutation.isPending
+                    ? "Importando..."
+                    : "Importar (.xlsx)"}
                 </button>
+
+                <input
+                  ref={importInputRef}
+                  type="file"
+                  accept=".xlsx,.xls"
+                  onChange={handleImportarArquivo}
+                  hidden
+                />
 
                 <button
                   type="button"
                   className="evento-copy-btn"
+                  onClick={handleExportarParticipantes}
+                  disabled={exportarParticipantesMutation.isPending}
                 >
-                  Exportar
+                  {exportarParticipantesMutation.isPending
+                    ? "Exportando..."
+                    : "Exportar (.xlsx)"}
                 </button>
               </div>
             </div>
+
+            {importacaoMensagem && (
+              <div
+                className={`evento-feedback ${importarParticipantesMutation.isError ? "error" : ""}`}
+              >
+                {importacaoMensagem}
+              </div>
+            )}
+
             {evento.participantes && evento.participantes.length > 0 ? (
               <div className="evento-participantes-table-wrapper">
                 <table className="evento-participantes-table">
@@ -333,9 +523,9 @@ export default function EventoDetalhes() {
                             {header.isPlaceholder
                               ? null
                               : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext(),
-                              )}
+                                  header.column.columnDef.header,
+                                  header.getContext(),
+                                )}
                           </th>
                         ))}
                       </tr>
@@ -382,6 +572,33 @@ export default function EventoDetalhes() {
         camposInscricao={evento?.camposInscricao || []}
         onClose={() => setParticipanteParaEditar(null)}
         onSuccess={handleParticipanteEditado}
+      />
+
+      <ModalImportarParticipantes
+        isOpen={isImportModalOpen}
+        participantes={participantesImportacao}
+        camposInscricao={evento?.camposInscricao || []}
+        errorMessage={isImportModalOpen ? importacaoMensagem : null}
+        isSubmitting={importarParticipantesMutation.isPending}
+        onClose={handleFecharImportacao}
+        onConfirm={handleConfirmarImportacao}
+      />
+
+      <ModalConfirmacao
+        isOpen={Boolean(participanteParaRemover)}
+        onClose={() => {
+          if (excluirParticipanteMutation.isPending) {
+            return;
+          }
+
+          setParticipanteParaRemover(null);
+        }}
+        onConfirm={handleConfirmarRemocaoParticipante}
+        mensagem={
+          participanteParaRemover
+            ? `Tem certeza que deseja remover o participante ${participanteParaRemover.nome}?`
+            : "Tem certeza que deseja remover este participante?"
+        }
       />
     </div>
   );
