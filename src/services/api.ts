@@ -134,6 +134,10 @@ function logoutAndRedirectToLogin() {
   }
 }
 
+function getStoredToken() {
+  return localStorage.getItem("auth_token");
+}
+
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -156,13 +160,15 @@ export async function request<T>(
   path: string,
   options?: RequestOptions,
 ): Promise<T> {
+  const token = options?.token || getStoredToken();
+
   const response = await api.request<T>({
     url: path,
     ...options,
     headers: {
       ...options?.headers,
-      ...(options?.token
-        ? { Authorization: `Bearer ${options.token}` }
+      ...(token
+        ? { Authorization: `Bearer ${token}` }
         : {}),
     },
   });
