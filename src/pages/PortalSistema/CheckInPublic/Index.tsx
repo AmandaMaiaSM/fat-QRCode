@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useParams } from "react-router-dom";
 
+import logoCheckList from "../../../assets/logoCheckList.png";
 import {
   apiService,
   type Evento,
@@ -178,7 +179,9 @@ export default function CheckInPublic() {
   return (
     <div className="checkin-container">
       <div className="checkin-card">
+
         <header className="checkin-header">
+          <img src={logoCheckList} alt="Logo do Evento" className="checkin-logo" />
           <h1>{eventoAtual.nome}</h1>
           <p>
             {formatarDataHora(eventoAtual.data)} - {eventoAtual.local || "Local nao informado"}

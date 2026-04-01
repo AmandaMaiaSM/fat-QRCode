@@ -44,6 +44,11 @@
   color: #555;
 }
 
+.modal-close-btn:hover {
+  background: #8d4820;
+  color: #ffffff;
+}
+
 .modal-criar-evento-form {
   display: flex;
   flex-direction: column;
@@ -92,8 +97,11 @@
   padding: 20px;
   border: 1px solid #e8dfc6;
   border-radius: 18px;
-  background:
-    linear-gradient(180deg, rgba(243, 235, 209, 0.45) 0%, rgba(255, 255, 255, 0.95) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(243, 235, 209, 0.45) 0%,
+    rgba(255, 255, 255, 0.95) 100%
+  );
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
@@ -138,6 +146,11 @@
 .modal-cancel-btn {
   background: #efe7d1;
   color: #6b5310;
+}
+
+.modal-cancel-btn:hover {
+  background: #8d4820;
+  color: #ffffff;
 }
 
 .modal-remove-campo-btn:disabled,

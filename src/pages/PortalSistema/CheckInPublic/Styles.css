@@ -7,6 +7,15 @@
   --text-sub: #666;
 }
 
+.checkin-logo {
+  width: 260px; 
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  image-rendering: -webkit-optimize-contrast; 
+}
 .checkin-container {
   min-height: 100vh;
   display: flex;

@@ -45,6 +45,7 @@ export type EventoParticipante = {
 };
 
 export type Evento = {
+  horario(horario: any): import("react").ReactNode;
   _id?: string;
   id?: string;
   nome: string;

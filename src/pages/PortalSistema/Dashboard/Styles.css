@@ -30,6 +30,17 @@
   font-size: 14px;
 }
 
+.user-info-subtitle {
+  margin-top: 2px;
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: #8d4820;
+}
+
+.user-info-location {
+  color: #7b6b45;
+}
+
 .user-avatar {
   width: 45px;
   height: 45px;
@@ -91,6 +102,20 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
+.dashboard-feedback {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f7f3e7;
+  color: #6b5310;
+  border: 1px solid #ead59a;
+}
+
+.dashboard-feedback.error {
+  background: #fef3f2;
+  color: #b42318;
+  border-color: #f3d2cf;
+}
+
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -109,6 +134,21 @@
   color: var(--color-primary);
   font-weight: bold;
   cursor: pointer;
+}
+
+.dashboard-details-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #efe7d1;
+  color: #6b5310;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dashboard-details-btn:hover {
+  background: #8d4820;
+  color: #ffffff;
 }
 
 /* Tabela */
@@ -252,6 +292,10 @@ td {
 
   .table-container td:nth-child(1)::before {
     content: "Nome";
+  }
+
+  .table-container td:nth-child(3)::before {
+    content: "Ações";
   }
 
   .table-container td:nth-child(2)::before {

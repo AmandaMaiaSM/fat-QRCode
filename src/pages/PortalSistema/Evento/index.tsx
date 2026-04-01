@@ -347,7 +347,7 @@ export default function EventoDetalhes() {
         ),
         participanteColumnHelper.display({
           id: "acoes",
-          header: "Acoes",
+          header: "AÇÕES",
           cell: ({ row }) => (
             <div className="evento-table-actions">
               <button
@@ -385,7 +385,7 @@ export default function EventoDetalhes() {
       <header className="evento-header">
         <div>
           <h1>Detalhes do Evento</h1>
-          <p>Visualize as informacoes completas do evento selecionado.</p>
+          <p>Visualize as informacões completas do evento selecionado.</p>
         </div>
         <button
           type="button"
@@ -425,7 +425,7 @@ export default function EventoDetalhes() {
               <strong>{formatarData(evento.data)}</strong>
             </div>
             <div className="evento-info-box">
-              <span>Horario</span>
+              <span>Horário</span>
               <strong>{formatarHora(evento.data)}</strong>
             </div>
             <div className="evento-info-box">
@@ -436,13 +436,13 @@ export default function EventoDetalhes() {
 
           <div className="evento-section">
             <div className="evento-section-header">
-              <h3>Informacoes do evento</h3>
+              <h3>Informacões do evento</h3>
               <button
                 type="button"
                 className="evento-edit-btn"
                 onClick={() => setIsEditarEventoOpen(true)}
               >
-                Editar informacoes
+                Editar informacões
               </button>
             </div>
           </div>
@@ -450,22 +450,22 @@ export default function EventoDetalhes() {
           <div className="evento-section-separator" aria-hidden="true" />
 
           <div className="evento-section">
-            <h3>Descricao</h3>
+            <h3>Descricão</h3>
             <p>{evento.descricao || "Sem descricao cadastrada."}</p>
           </div>
 
           <div className="evento-section-separator" aria-hidden="true" />
 
           <div className="evento-section">
-            <h3>Campos de inscricao</h3>
+            <h3>Campos de inscricão</h3>
             <div className="evento-campos-list">
               <div className="evento-campo-item evento-campo-item-obrigatorio">
                 <strong>Nome</strong>
-                <span>obrigatorio</span>
+                <span>Obrigatorio</span>
               </div>
               <div className="evento-campo-item evento-campo-item-obrigatorio">
                 <strong>E-mail</strong>
-                <span>obrigatorio</span>
+                <span>Obrigatorio</span>
               </div>
               {(evento.camposInscricao || []).map((campo) => (
                 <div
@@ -511,6 +511,7 @@ export default function EventoDetalhes() {
               <button
                 type="button"
                 className="evento-copy-btn"
+
                 onClick={handleBaixarQrCode}
               >
                 Baixar imagem do QR Code
