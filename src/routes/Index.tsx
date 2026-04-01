@@ -8,7 +8,6 @@ import EsqueciSenha from "../pages/PortalLogin/EsqueciSenha/Index";
 //Rotas do sistema interno
 import LayoutSistema from "../layout/LayoutSistema/Index";
 import Dashboard from "../pages/PortalSistema/Dashboard/Index";
-import RegistrarPresencas from "../pages/PortalSistema/RegistrarPresencas/Index";
 import EmitirCertificado from "../pages/PortalSistema/EmitirCertificado/Index";
 import Configuracoes from "../pages/PortalSistema/Configuracao/Index";
 import CheckInPublic from "../pages/PortalSistema/CheckInPublic/Index";
@@ -35,7 +34,6 @@ export default function AppRoutes() {
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="meus-eventos" element={<MeusEventosNovo />} />
-        <Route path="registrar-presencas" element={<RegistrarPresencas />} />
         <Route path="emitir-certificado" element={<EmitirCertificado />} />
         <Route path="configuracoes" element={<Configuracoes />} />
         <Route path="emitir-certificado-02" element={<EmitirCertificadoHTML />} />

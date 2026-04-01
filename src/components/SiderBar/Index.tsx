@@ -44,15 +44,6 @@ export default function SiderBar() {
         </NavLink>
 
         <NavLink
-          title="Registrar Presencas"
-          to="/sistemaQR/registrar-presencas"
-          className={navClass}
-        >
-          <UserPen className="nav-icon" />
-          {activeMenu && <span>Registrar Presencas</span>}
-        </NavLink>
-
-        <NavLink
           title="Emitir Certificado"
           to="/sistemaQR/emitir-certificado"
           className={navClass}

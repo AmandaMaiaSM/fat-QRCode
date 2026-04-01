@@ -116,6 +116,19 @@
   padding-top: 6px;
 }
 
+.evento-section-separator {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(212, 160, 23, 0) 0%,
+    rgba(212, 160, 23, 0.32) 18%,
+    rgba(141, 72, 32, 0.16) 50%,
+    rgba(212, 160, 23, 0.32) 82%,
+    rgba(212, 160, 23, 0) 100%
+  );
+}
+
 .evento-section-header {
   display: flex;
   justify-content: space-between;
@@ -183,6 +196,13 @@
   white-space: nowrap;
   font-weight: 700;
   box-shadow: 0 10px 20px rgba(212, 160, 23, 0.18);
+}
+
+.evento-copy-btn,
+.evento-secondary-btn,
+.evento-edit-btn,
+.evento-back-btn {
+  min-height: 44px;
 }
 
 .evento-copy-btn:disabled,
@@ -282,12 +302,21 @@
   cursor: pointer;
   font: inherit;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
 }
 
 .evento-table-actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.evento-table-action-label {
+  display: inline;
 }
 
 .evento-table-action-danger {
@@ -323,6 +352,18 @@
     align-items: stretch;
   }
 
+  .evento-participantes-actions {
+    width: 100%;
+  }
+
+  .evento-secondary-btn,
+  .evento-copy-btn,
+  .evento-edit-btn,
+  .evento-back-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
   .evento-card-detalhes {
     padding: 18px;
     border-radius: 20px;
@@ -332,12 +373,34 @@
     font-size: 1.65rem;
   }
 
+  .evento-badge {
+    align-self: flex-start;
+  }
+
   .evento-participantes-table {
     min-width: 100%;
   }
 }
 
 @media (max-width: 640px) {
+  .evento-card-detalhes {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .evento-info-box,
+  .evento-campo-item,
+  .evento-link-box,
+  .evento-qr-box,
+  .evento-feedback {
+    padding: 14px;
+  }
+
+  .evento-qr-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
   .evento-participantes-table thead {
     display: none;
   }
@@ -358,6 +421,7 @@
   .evento-participantes-table tr {
     padding: 14px 16px;
     border-bottom: 1px solid #e7deca;
+    background: rgba(255, 255, 255, 0.7);
   }
 
   .evento-participantes-table tbody tr:last-child {
@@ -372,6 +436,22 @@
   .evento-participantes-table td:last-child {
     border-bottom: none;
     padding-bottom: 0;
+  }
+
+  .evento-table-actions {
+    justify-content: flex-end;
+  }
+
+  .evento-table-action {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 12px;
+  }
+
+  .evento-table-action-label {
+    display: none;
   }
 
   .evento-participantes-table td::before {

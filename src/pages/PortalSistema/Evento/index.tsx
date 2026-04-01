@@ -7,12 +7,14 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useNavigate, useParams } from "react-router-dom";
+import { Pencil, Trash2 } from "lucide-react";
 import QRCode from "react-qr-code";
 import { toPng } from "html-to-image";
 
 import { apiService, type EventoParticipante } from "../../../services/api";
 import ModalEditarEvento from "../../../components/ModalEditarEvento/Index";
 import ModalEditarParticipante from "../../../components/ModalEditarParticipante/Index";
+import ModalCadastrarParticipante from "../../../components/ModalCadastrarParticipante/Index";
 import ModalImportarParticipantes from "../../../components/ModalImportarParticipantes/Index";
 import ModalConfirmacao from "../../../components/ModalConfirmacao/Index";
 import { formatarData, formatarHora } from "../../../services/data";
@@ -31,6 +33,8 @@ export default function EventoDetalhes() {
   const [copiado, setCopiado] = useState(false);
   const [isEditarEventoOpen, setIsEditarEventoOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isCadastrarParticipanteOpen, setIsCadastrarParticipanteOpen] =
+    useState(false);
   const [participanteParaEditar, setParticipanteParaEditar] =
     useState<EventoParticipante | null>(null);
   const [participanteParaRemover, setParticipanteParaRemover] =
@@ -266,6 +270,14 @@ export default function EventoDetalhes() {
     });
   };
 
+  const handleParticipanteCadastrado = async () => {
+    setIsCadastrarParticipanteOpen(false);
+    setImportacaoMensagem("Participante cadastrado com sucesso.");
+    await queryClient.invalidateQueries({
+      queryKey: ["evento", id],
+    });
+  };
+
   const handleConfirmarRemocaoParticipante = async () => {
     const participanteId = String(
       participanteParaRemover?._id || participanteParaRemover?.id || "",
@@ -307,15 +319,19 @@ export default function EventoDetalhes() {
                 type="button"
                 className="evento-table-action"
                 onClick={() => setParticipanteParaEditar(row.original)}
+                aria-label={`Editar participante ${row.original.nome}`}
               >
-                Editar
+                <Pencil size={16} aria-hidden="true" />
+                <span className="evento-table-action-label">Editar</span>
               </button>
               <button
                 type="button"
                 className="evento-table-action evento-table-action-danger"
                 onClick={() => setParticipanteParaRemover(row.original)}
+                aria-label={`Remover participante ${row.original.nome}`}
               >
-                Remover
+                <Trash2 size={16} aria-hidden="true" />
+                <span className="evento-table-action-label">Remover</span>
               </button>
             </div>
           ),
@@ -341,7 +357,7 @@ export default function EventoDetalhes() {
           className="evento-back-btn"
           onClick={() => navigate("/sistemaQR/meus-eventos")}
         >
-          Voltar
+          Voltar para eventos
         </button>
       </header>
 
@@ -391,15 +407,19 @@ export default function EventoDetalhes() {
                 className="evento-edit-btn"
                 onClick={() => setIsEditarEventoOpen(true)}
               >
-                Editar evento
+                Editar informacoes
               </button>
             </div>
           </div>
+
+          <div className="evento-section-separator" aria-hidden="true" />
 
           <div className="evento-section">
             <h3>Descricao</h3>
             <p>{evento.descricao || "Sem descricao cadastrada."}</p>
           </div>
+
+          <div className="evento-section-separator" aria-hidden="true" />
 
           <div className="evento-section">
             <h3>Campos de inscricao</h3>
@@ -424,6 +444,8 @@ export default function EventoDetalhes() {
             </div>
           </div>
 
+          <div className="evento-section-separator" aria-hidden="true" />
+
           <div className="evento-section">
             <h3>Link de check-in</h3>
             <div className="evento-link-box">
@@ -436,10 +458,12 @@ export default function EventoDetalhes() {
                 className="evento-copy-btn"
                 onClick={handleCopiarLink}
               >
-                {copiado ? "Copiado!" : "Copiar link"}
+                {copiado ? "Link copiado!" : "Copiar link de check-in"}
               </button>
             </div>
           </div>
+
+          <div className="evento-section-separator" aria-hidden="true" />
 
           <div className="evento-section">
             <h3>QR Code do check-in</h3>
@@ -454,10 +478,12 @@ export default function EventoDetalhes() {
                 className="evento-copy-btn"
                 onClick={handleBaixarQrCode}
               >
-                Baixar QR Code
+                Baixar imagem do QR Code
               </button>
             </div>
           </div>
+
+          <div className="evento-section-separator" aria-hidden="true" />
 
           <div className="evento-section">
             <div className="evento-section-header">
@@ -467,9 +493,20 @@ export default function EventoDetalhes() {
                 <button
                   type="button"
                   className="evento-secondary-btn"
+                  onClick={() => {
+                    setImportacaoMensagem(null);
+                    setIsCadastrarParticipanteOpen(true);
+                  }}
+                >
+                  Adicionar participante
+                </button>
+
+                <button
+                  type="button"
+                  className="evento-secondary-btn"
                   onClick={handleBaixarTemplate}
                 >
-                  Obter template
+                  Baixar modelo da planilha
                 </button>
 
                 <button
@@ -479,8 +516,8 @@ export default function EventoDetalhes() {
                   disabled={importarParticipantesMutation.isPending}
                 >
                   {importarParticipantesMutation.isPending
-                    ? "Importando..."
-                    : "Importar (.xlsx)"}
+                    ? "Importando planilha..."
+                    : "Importar participantes por planilha"}
                 </button>
 
                 <input
@@ -498,8 +535,8 @@ export default function EventoDetalhes() {
                   disabled={exportarParticipantesMutation.isPending}
                 >
                   {exportarParticipantesMutation.isPending
-                    ? "Exportando..."
-                    : "Exportar (.xlsx)"}
+                    ? "Exportando participantes..."
+                    : "Exportar participantes"}
                 </button>
               </div>
             </div>
@@ -572,6 +609,14 @@ export default function EventoDetalhes() {
         camposInscricao={evento?.camposInscricao || []}
         onClose={() => setParticipanteParaEditar(null)}
         onSuccess={handleParticipanteEditado}
+      />
+
+      <ModalCadastrarParticipante
+        isOpen={Boolean(isCadastrarParticipanteOpen && id)}
+        eventoId={id || ""}
+        camposInscricao={evento?.camposInscricao || []}
+        onClose={() => setIsCadastrarParticipanteOpen(false)}
+        onSuccess={handleParticipanteCadastrado}
       />
 
       <ModalImportarParticipantes

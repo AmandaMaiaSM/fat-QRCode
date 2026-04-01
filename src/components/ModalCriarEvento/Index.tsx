@@ -12,7 +12,6 @@ import {
 import "./Styles.css";
 
 type CampoForm = CampoInscricao & {
-  keyId: string;
 };
 
 type CriarEventoFormData = {
@@ -31,7 +30,6 @@ type ModalCriarEventoProps = {
 };
 
 const defaultCampo = (): CampoForm => ({
-  keyId: crypto.randomUUID(),
   identificador: "",
   rotulo: "",
 });
@@ -80,7 +78,6 @@ export default function ModalCriarEvento({
   const { fields, append, remove } = useFieldArray({
     control,
     name: "camposInscricao",
-    keyName: "keyId",
   });
 
   const criarEventoMutation = useMutation({
@@ -245,13 +242,14 @@ export default function ModalCriarEvento({
 
             <div className="modal-campos-list">
               {fields.map((field, index) => (
-                <div className="modal-campo-item" key={field.keyId}>
+                <div className="modal-campo-item" key={field.id}>
                   <label className="modal-form-group">
                     <span>Identificador</span>
                     <input
                       type="text"
                       placeholder="empresa"
                       {...register(`camposInscricao.${index}.identificador`, {
+                        required: "Informe o identificador do campo.",
                         pattern: {
                           value: /^[a-zA-Z0-9_]+$/,
                           message:
@@ -271,7 +269,9 @@ export default function ModalCriarEvento({
                     <input
                       type="text"
                       placeholder="Empresa"
-                      {...register(`camposInscricao.${index}.rotulo`)}
+                      {...register(`camposInscricao.${index}.rotulo`, {
+                        required: "Informe o rotulo do campo.",
+                      })}
                     />
                     {errors.camposInscricao?.[index]?.rotulo && (
                       <small className="modal-form-error">
