@@ -27,6 +27,34 @@ import "./style.css";
 
 const participanteColumnHelper = createColumnHelper<EventoParticipante>();
 
+async function copiarTexto(texto: string) {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(texto);
+      return true;
+    } catch {
+      // Continua para o fallback abaixo.
+    }
+  }
+
+  const textArea = document.createElement("textarea");
+  textArea.value = texto;
+  textArea.setAttribute("readonly", "");
+  textArea.style.position = "fixed";
+  textArea.style.top = "-9999px";
+  textArea.style.left = "-9999px";
+
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    return document.execCommand("copy");
+  } finally {
+    document.body.removeChild(textArea);
+  }
+}
+
 export default function EventoDetalhes() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -166,7 +194,14 @@ export default function EventoDetalhes() {
   const handleCopiarLink = async () => {
     if (!checkinUrl) return;
 
-    await navigator.clipboard.writeText(checkinUrl);
+    const copiou = await copiarTexto(checkinUrl);
+
+    if (!copiou) {
+      setImportacaoMensagem("Nao foi possivel copiar o link automaticamente.");
+      return;
+    }
+
+    setImportacaoMensagem(null);
     setCopiado(true);
 
     window.setTimeout(() => {
