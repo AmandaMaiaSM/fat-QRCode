@@ -97,12 +97,60 @@ export type ListarEventosFiltros = Partial<{
   endAt: string;
 }>;
 
+function normalizeText(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function shouldForceLogout(error: unknown) {
+  if (!axios.isAxiosError(error)) {
+    return false;
+  }
+
+  if (error.response?.status !== 401) {
+    return false;
+  }
+
+  const responseMessage = error.response?.data?.message;
+
+  if (typeof responseMessage !== "string") {
+    return false;
+  }
+
+  const normalizedMessage = normalizeText(responseMessage);
+
+  return normalizedMessage.includes("token invalido ou expirado");
+}
+
+function logoutAndRedirectToLogin() {
+  localStorage.removeItem("auth_token");
+  localStorage.removeItem("auth_user");
+
+  if (window.location.pathname !== "/portallogin/login") {
+    window.location.replace("/portallogin/login");
+  }
+}
+
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (shouldForceLogout(error) && localStorage.getItem("auth_token")) {
+      logoutAndRedirectToLogin();
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export async function request<T>(
   path: string,
