@@ -249,7 +249,7 @@ export default function CheckInPublic() {
               className="btn-submit"
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? "Enviando..." : "Confirmar Presenca"}
+              {mutation.isPending ? "Enviando..." : "Confirmar Presença"}
             </button>
           </form>
         )}
