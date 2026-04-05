@@ -194,7 +194,7 @@ export default function CheckInPublic() {
         {sucesso ? (
           <div className="sucesso-container">
             <div className="icon-check">OK</div>
-            <h3>Presenca confirmada!</h3>
+            <h3>Presença confirmada!</h3>
             <p>Sua participacao foi registrada com sucesso.</p>
             <button onClick={handleNovoRegistro} className="btn-voltar">
               Novo Registro
