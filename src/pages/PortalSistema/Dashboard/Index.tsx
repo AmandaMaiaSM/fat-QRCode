@@ -26,13 +26,38 @@ function getFimDaSemana(dataBase: Date) {
   return data;
 }
 
+function parseDataEvento(dataEvento: string) {
+  if (!dataEvento) {
+    return null;
+  }
+
+  // Quando a API manda apenas YYYY-MM-DD, criar data local evita deslocamento por UTC.
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dataEvento)) {
+    const [ano, mes, dia] = dataEvento.split("-").map(Number);
+    return new Date(ano, mes - 1, dia, 12, 0, 0, 0);
+  }
+
+  const data = new Date(dataEvento);
+
+  if (Number.isNaN(data.getTime())) {
+    return null;
+  }
+
+  return data;
+}
+
 function getEventoId(evento: Evento) {
   return String(evento._id || evento.id || crypto.randomUUID());
 }
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const agora = useMemo(() => new Date(), []);
+
+  const inicioDoDiaAtual = useMemo(() => {
+    const data = new Date();
+    data.setHours(0, 0, 0, 0);
+    return data;
+  }, []);
 
   const inicioDaSemana = useMemo(() => getInicioDaSemana(new Date()), []);
   const fimDaSemana = useMemo(() => getFimDaSemana(new Date()), []);
@@ -51,25 +76,32 @@ export default function Dashboard() {
     () =>
       eventos
         .filter((evento) => {
-          const dataEvento = new Date(evento.data);
+          const dataEvento = parseDataEvento(evento.data);
 
-          if (Number.isNaN(dataEvento.getTime())) {
+          if (!dataEvento) {
             return false;
           }
 
-          return dataEvento >= inicioDaSemana && dataEvento <= fimDaSemana;
+          return dataEvento >= inicioDoDiaAtual && dataEvento <= fimDaSemana;
         })
-        .sort(
-          (a, b) => new Date(a.data).getTime() - new Date(b.data).getTime(),
-        ),
-    [eventos, fimDaSemana, inicioDaSemana],
+        .sort((a, b) => {
+          const dataA = parseDataEvento(a.data);
+          const dataB = parseDataEvento(b.data);
+
+          if (!dataA || !dataB) {
+            return 0;
+          }
+
+          return dataA.getTime() - dataB.getTime();
+        }),
+    [eventos, fimDaSemana, inicioDoDiaAtual],
   );
 
   const eventosDaSemanaOrdenados = useMemo(
     () =>
       [...eventosDaSemana].sort((a, b) => {
-        const dataA = new Date(a.data).getTime();
-        const dataB = new Date(b.data).getTime();
+        const dataA = parseDataEvento(a.data)?.getTime() || 0;
+        const dataB = parseDataEvento(b.data)?.getTime() || 0;
 
         return dataA - dataB;
       }),
@@ -88,15 +120,15 @@ export default function Dashboard() {
   const proximoEvento = useMemo(
     () =>
       eventosDaSemanaOrdenados.find((evento) => {
-        const dataEvento = new Date(evento.data);
+        const dataEvento = parseDataEvento(evento.data);
 
-        if (Number.isNaN(dataEvento.getTime())) {
+        if (!dataEvento) {
           return false;
         }
 
-        return dataEvento >= agora;
+        return dataEvento >= inicioDoDiaAtual;
       }) || null,
-    [agora, eventosDaSemanaOrdenados],
+    [eventosDaSemanaOrdenados, inicioDoDiaAtual],
   );
 
   return (

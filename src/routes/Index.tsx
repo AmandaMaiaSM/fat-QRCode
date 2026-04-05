@@ -37,8 +37,8 @@ export default function AppRoutes() {
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="meus-eventos" element={<MeusEventosNovo />} />
-        <Route path="emitir-certificado" element={<EmitirCertificado />} />
-        <Route path="configuracoes" element={<Configuracoes />} />
+        {/*<Route path="emitir-certificado" element={<EmitirCertificado />} />
+        <Route path="configuracoes" element={<Configuracoes />} />*/}
         <Route path="emitir-certificado-02" element={<EmitirCertificadoHTML />} />
         <Route path="evento/:id" element={<EventoDetalhes />} />
       </Route>
